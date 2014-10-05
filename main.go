@@ -18,9 +18,8 @@ type Scenario struct {
 }
 
 func main() {
-	Debug("start main")
-
-	scenarios, err := LoadSenarios("fixture/google_search.yml")
+	filePath := ParseCliArgs()
+	scenarios, err := LoadSenarios(filePath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -28,6 +27,4 @@ func main() {
 
 	player := NewPlayer()
 	player.Play(scenarios)
-
-	Debug("end main")
 }
