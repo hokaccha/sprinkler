@@ -1,0 +1,24 @@
+- name: Google search
+  url: http://www.google.com
+  actions:
+    - wait: 1000
+
+    - assert: equal_title
+      expected: Google
+
+    - wait: 1000
+
+    - trigger: input
+      value: hoge
+      element: input[type="text"]
+
+    - wait: 1000
+
+    - trigger: click
+      element: button[name="btnG"]
+
+    - wait: 1000
+
+    - assert: contain_text
+      element: "#main"
+      expected: hoge
