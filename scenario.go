@@ -19,9 +19,9 @@ type Scenario struct {
 type Scenarios []Scenario
 
 type ScenarioFile struct {
-	FullPath string
-	BaseName string
-	BaseDir string
+	FullPath  string
+	BaseName  string
+	BaseDir   string
 	Scenarios Scenarios
 }
 
@@ -41,9 +41,9 @@ func NewSenarioFile(inputFilePath string) (*ScenarioFile, error) {
 	}
 
 	return &ScenarioFile{
-		FullPath: fullPath,
-		BaseName: baseName,
-		BaseDir: baseDir,
+		FullPath:  fullPath,
+		BaseName:  baseName,
+		BaseDir:   baseDir,
 		Scenarios: scenarios,
 	}, nil
 }

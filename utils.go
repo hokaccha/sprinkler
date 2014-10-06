@@ -42,5 +42,5 @@ func ContainSlice(s []string, val string) bool {
 		}
 	}
 
-    return false
+	return false
 }
