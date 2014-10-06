@@ -12,6 +12,7 @@ func playLog(command string, message string, args ...interface{}) {
 
 func (player *Player) PlayVisitCommand(action Action) error {
 	url := NormalizeUrl(action["url"], player.scenarioFile.BaseDir)
+	playLog("visit", "url=%s", url)
 
 	if url == "" {
 		return fmt.Errorf("visit URL is not defined")
@@ -23,13 +24,12 @@ func (player *Player) PlayVisitCommand(action Action) error {
 		return err
 	}
 
-	playLog("visit", "url=%s", url)
-
 	return nil
 }
 
 func (player *Player) PlayWaitCommand(action Action) error {
 	interval, ok := action["interval"]
+	playLog("wait", "interval=%s", interval)
 
 	if !ok {
 		return fmt.Errorf("wait interval is not defined")
@@ -41,8 +41,6 @@ func (player *Player) PlayWaitCommand(action Action) error {
 		return fmt.Errorf("wait interval is invalid: %s", interval)
 	}
 
-	playLog("wait", "interval=%dms", ms)
-
 	time.Sleep(time.Duration(ms) * time.Millisecond)
 
 	return nil
@@ -51,6 +49,7 @@ func (player *Player) PlayWaitCommand(action Action) error {
 func (player *Player) PlayInputCommand(action Action) error {
 	selector := action["element"]
 	value := action["value"]
+	playLog("input", "element=%s, value=%s", selector, value)
 
 	if value == "" {
 		return fmt.Errorf("value is not defiend")
@@ -62,49 +61,44 @@ func (player *Player) PlayInputCommand(action Action) error {
 		return err
 	}
 
-	playLog("input", "element=%s, value=%s", selector, value)
-
 	return el.SendKeys(value)
 }
 
 func (player *Player) PlayClickCommand(action Action) error {
 	selector := action["element"]
+	playLog("click", "element=%s", selector)
 
 	el, err := player.FindElement(selector)
 
 	if err != nil {
 		return err
 	}
-
-	playLog("click", "element=%s", selector)
 
 	return el.Click()
 }
 
 func (player *Player) PlaySubmitCommand(action Action) error {
 	selector := action["element"]
+	playLog("submit", "element=%s", selector)
 
 	el, err := player.FindElement(selector)
 
 	if err != nil {
 		return err
 	}
-
-	playLog("submit", "element=%s", selector)
 
 	return el.Submit()
 }
 
 func (player *Player) PlayClearCommand(action Action) error {
 	selector := action["element"]
+	playLog("clear", "element=%s", selector)
 
 	el, err := player.FindElement(selector)
 
 	if err != nil {
 		return err
 	}
-
-	playLog("clear", "element=%s", selector)
 
 	return el.Clear()
 }
