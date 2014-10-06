@@ -315,3 +315,31 @@ func (player *Player) PlayUrlContainAssert(action Action) error {
 
 	return nil
 }
+
+func (player *Player) PlayAlertTextEqualAssert(action Action) error {
+	expected := action["expected"]
+
+	text, err := player.wd.AlertText()
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual("alert text", text, expected)
+
+	return nil
+}
+
+func (player *Player) PlayAlertTextContainAssert(action Action) error {
+	expected := action["expected"]
+
+	text, err := player.wd.AlertText()
+
+	if err != nil {
+		return err
+	}
+
+	assertContain("alert text", text, expected)
+
+	return nil
+}

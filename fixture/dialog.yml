@@ -1,0 +1,33 @@
+- name: Dialog
+  actions:
+  - command: visit
+    url: dialog.html
+
+  - command: click
+    element: .showAlert
+
+  - assert: alert_text_equal
+    expected: alert!
+
+  - command: accept_alert
+
+  - command: click
+    element: .showConfirm
+
+  - assert: alert_text_contain
+    expected: ok
+
+  - command: accept_alert
+
+  - assert: text_equal
+    element: .log
+    expected: ok
+
+  - command: click
+    element: .showConfirm
+
+  - command: dismiss_alert
+
+  - assert: text_equal
+    element: .log
+    expected: cancel

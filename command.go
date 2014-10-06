@@ -102,3 +102,13 @@ func (player *Player) PlayClearCommand(action Action) error {
 
 	return el.Clear()
 }
+
+func (player *Player) PlayAcceptAlertCommand(action Action) error {
+	playLog("accept alert", "")
+	return player.wd.AcceptAlert()
+}
+
+func (player *Player) PlayDismissAlertCommand(action Action) error {
+	playLog("dismiss alert", "")
+	return player.wd.DismissAlert()
+}

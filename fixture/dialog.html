@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Sample</title>
+</head>
+<body>
+
+<div class="log"></div>
+
+<button class="showAlert">show alert</button>
+<button class="showConfirm">show confirm</button>
+
+<script src="./jquery-2.1.1.js"></script>
+<script>
+$('.showAlert').click(function() {
+  window.alert('alert!');
+});
+
+$('.showConfirm').click(function() {
+  var res = window.confirm('ok?');
+
+  if (res) {
+    $('.log').text('ok');
+  }
+  else {
+    $('.log').text('cancel');
+  }
+});
+</script>
+</body>
+</html>
