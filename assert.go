@@ -64,7 +64,7 @@ func (player *Player) getAttribute(selector, name string) (string, error) {
 }
 
 func (player *Player) PlayTitleEqualAssert(action Action) error {
-	expected := action["expected"]
+	expected := action["expect"]
 	title, err := player.wd.Title()
 
 	if err != nil {
@@ -78,7 +78,7 @@ func (player *Player) PlayTitleEqualAssert(action Action) error {
 
 func (player *Player) PlayTextEqualAssert(action Action) error {
 	selector := action["element"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	el, err := player.FindElement(selector)
 
@@ -99,7 +99,7 @@ func (player *Player) PlayTextEqualAssert(action Action) error {
 
 func (player *Player) PlayTextContainAssert(action Action) error {
 	selector := action["element"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	el, err := player.FindElement(selector)
 
@@ -137,7 +137,7 @@ func (player *Player) PlayAttributeEqualAssert(action Action) error {
 func (player *Player) PlayAttributeContainAssert(action Action) error {
 	selector := action["element"]
 	attrName := action["name"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	value, err := player.getAttribute(selector, attrName)
 
@@ -153,7 +153,7 @@ func (player *Player) PlayAttributeContainAssert(action Action) error {
 func (player *Player) PlayAttributePresentAssert(action Action) error {
 	selector := action["element"]
 	attrName := action["name"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	value, err := player.getAttribute(selector, attrName)
 
@@ -168,7 +168,7 @@ func (player *Player) PlayAttributePresentAssert(action Action) error {
 
 func (player *Player) PlayValueContainAssert(action Action) error {
 	selector := action["element"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	value, err := player.getAttribute(selector, "value")
 
@@ -183,7 +183,7 @@ func (player *Player) PlayValueContainAssert(action Action) error {
 
 func (player *Player) PlayValueEqualAssert(action Action) error {
 	selector := action["element"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	value, err := player.getAttribute(selector, "value")
 
@@ -199,7 +199,7 @@ func (player *Player) PlayValueEqualAssert(action Action) error {
 func (player *Player) PlayCssPropertyEqualAssert(action Action) error {
 	selector := action["element"]
 	propertyName := action["property"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	el, err := player.FindElement(selector)
 
@@ -220,7 +220,7 @@ func (player *Player) PlayCssPropertyEqualAssert(action Action) error {
 
 func (player *Player) PlayElementLengthEqualAssert(action Action) error {
 	selector := action["element"]
-	expected := action["expected"]
+	expected := action["expect"]
 
 	els, err := player.FindElements(selector)
 
@@ -289,7 +289,7 @@ func (player *Player) PlayElementHiddenAssert(action Action) error {
 }
 
 func (player *Player) PlayUrlEqualAssert(action Action) error {
-	expected := action["expected"]
+	expected := action["expect"]
 
 	url, err := player.wd.CurrentURL()
 
@@ -303,7 +303,7 @@ func (player *Player) PlayUrlEqualAssert(action Action) error {
 }
 
 func (player *Player) PlayUrlContainAssert(action Action) error {
-	expected := action["expected"]
+	expected := action["expect"]
 
 	url, err := player.wd.CurrentURL()
 
@@ -317,7 +317,7 @@ func (player *Player) PlayUrlContainAssert(action Action) error {
 }
 
 func (player *Player) PlayAlertTextEqualAssert(action Action) error {
-	expected := action["expected"]
+	expected := action["expect"]
 
 	text, err := player.wd.AlertText()
 
@@ -331,7 +331,7 @@ func (player *Player) PlayAlertTextEqualAssert(action Action) error {
 }
 
 func (player *Player) PlayAlertTextContainAssert(action Action) error {
-	expected := action["expected"]
+	expected := action["expect"]
 
 	text, err := player.wd.AlertText()
 

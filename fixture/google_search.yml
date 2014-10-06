@@ -7,7 +7,7 @@
       interval: 1000
 
     - assert: title_equal
-      expected: Google
+      expect: Google
 
     - command: wait
       interval: 1000
@@ -27,4 +27,4 @@
 
     - assert: text_contain
       element: "#main"
-      expected: hoge
+      expect: hoge

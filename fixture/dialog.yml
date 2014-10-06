@@ -7,7 +7,7 @@
     element: .showAlert
 
   - assert: alert_text_equal
-    expected: alert!
+    expect: alert!
 
   - command: accept_alert
 
@@ -15,13 +15,13 @@
     element: .showConfirm
 
   - assert: alert_text_contain
-    expected: ok
+    expect: ok
 
   - command: accept_alert
 
   - assert: text_equal
     element: .log
-    expected: ok
+    expect: ok
 
   - command: click
     element: .showConfirm
@@ -30,4 +30,4 @@
 
   - assert: text_equal
     element: .log
-    expected: cancel
+    expect: cancel

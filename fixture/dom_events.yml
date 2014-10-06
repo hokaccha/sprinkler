@@ -5,14 +5,14 @@
 
   - assert: text_equal
     element: .log
-    expected: ""
+    expect: ""
 
   - command: click
     element: .clickBtn
 
   - assert: text_equal
     element: .log
-    expected: clicked!
+    expect: clicked!
 
   - command: input
     element: input[name="test"]
@@ -20,22 +20,22 @@
 
   - assert: value_equal
     element: input[name="test"]
-    expected: input value
+    expect: input value
 
   - assert: value_contain
     element: input[name="test"]
-    expected: input
+    expect: input
 
   - command: submit
     element: .form
 
   - assert: text_equal
     element: .log
-    expected: input value
+    expect: input value
 
   - command: clear
     element: input[name="test"]
 
   - assert: value_equal
     element: input[name="test"]
-    expected: ""
+    expect: ""
