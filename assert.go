@@ -189,3 +189,25 @@ func (player *Player) PlayValueEqualAssert(action Action) error {
 
 	return nil
 }
+
+func (player *Player) PlayCssAssert(action Action) error {
+	selector := action["element"]
+	propertyName := action["property"]
+	expected := action["expected"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	value, err := el.CSSProperty(propertyName)
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual(selector + " " + propertyName, value, expected)
+
+	return nil
+}

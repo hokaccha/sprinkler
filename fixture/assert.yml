@@ -33,3 +33,15 @@
     element: div
     name: class
     expected: hoge
+
+- name: CSS property assertion
+  actions:
+  - assert: css
+    element: div
+    property: color
+    expected: rgba(255, 0, 0, 1)
+
+  - assert: css
+    element: div
+    property: font-size
+    expected: 14px
