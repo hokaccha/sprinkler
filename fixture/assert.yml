@@ -1,7 +1,7 @@
 - name: Attributes assertion
   actions:
   - command: visit
-    url: attribute_assert.html
+    url: assert.html
 
   - assert: attribute_equal
     element: div
