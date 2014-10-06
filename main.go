@@ -7,7 +7,7 @@ import (
 	"github.com/visionmedia/go-debug"
 )
 
-var Debug = debug.Debug("screenplay")
+var Debug = debug.Debug("sprinkler")
 
 func init() {
 	selenium.Log = nil

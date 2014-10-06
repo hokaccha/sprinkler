@@ -1,3 +1,3 @@
-# screenplay
+# sprinkler
 
 selenium wrapper.

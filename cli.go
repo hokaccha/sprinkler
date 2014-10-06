@@ -7,7 +7,7 @@ import (
 )
 
 const USAGE = `
-  Usage: screenplay scenario.yml
+  Usage: sprinkler scenario.yml
   
   Options:
     --version, -v        print the version
@@ -28,7 +28,7 @@ func ParseCliArgs() string {
 	flag.Parse()
 
 	if *version == true {
-		fmt.Fprintf(os.Stderr, "screenplay version: %s\n", Version)
+		fmt.Fprintf(os.Stderr, "sprinkler version: %s\n", Version)
 		os.Exit(0)
 	}
 
