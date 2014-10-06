@@ -42,6 +42,48 @@ func (player *Player) PlayWaitCommand(action Action) error {
 	return nil
 }
 
+func (player *Player) PlayWaitForElementCommand(action Action) error {
+	selector := action["element"]
+	timeout, err := strconv.Atoi(action["timeout"])
+
+	if err != nil {
+		timeout = 5000
+	}
+
+	playLog("wait", "element=%s, timeout=%d", selector, timeout)
+
+	// TODO: Use Channel
+	interval := 200
+	duration := time.Duration(interval) * time.Millisecond
+	totalTime := 0
+	wait := func() {
+		totalTime += interval
+		time.Sleep(duration)
+	}
+
+	for {
+		if totalTime > timeout {
+			return fmt.Errorf("Wait element timeout: %s", selector)
+		}
+
+		el, err := player.FindElement(selector)
+
+		if err != nil {
+			wait()
+			continue
+		}
+
+		visible, err := el.IsDisplayed()
+
+		if visible == false || err != nil {
+			wait()
+			continue
+		}
+
+		return nil
+	}
+}
+
 func (player *Player) PlayInputCommand(action Action) error {
 	selector := action["element"]
 	value := action["value"]

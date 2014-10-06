@@ -1,0 +1,15 @@
+- name: Wait
+  actions:
+  - command: visit
+    url: wait.html
+
+  - command: wait_for_element
+    element: .el
+    timeout: 3000
+
+  - assert: text_equal
+    element: .el
+    expect: foo
+
+  - command: wait
+    interval: 1000
