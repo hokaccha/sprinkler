@@ -29,6 +29,26 @@ func assertEqual(subject string, actual string, expected string) {
 	}
 }
 
+func (player *Player) getAttribute(selector string, name string) (string, error) {
+	if name == "" {
+		return "", fmt.Errorf("Attribute name is not defined")
+	}
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return "", err
+	}
+
+	value, err := el.GetAttribute(name)
+
+	if err != nil {
+		return "", err
+	}
+
+	return value, nil
+}
+
 func (player *Player) PlayEqualTitleAssert(action Action) error {
 	expected := action["expected"]
 	title, err := player.wd.Title()
@@ -89,17 +109,7 @@ func (player *Player) PlayAttributeAssert(action Action) error {
 	attrName := action["name"]
 	expected := action["expected"]
 
-	if attrName == "" {
-		return fmt.Errorf("Attribute name is not defined")
-	}
-
-	el, err := player.FindElement(selector)
-
-	if err != nil {
-		return err
-	}
-
-	value, err := el.GetAttribute(attrName)
+	value, err := player.getAttribute(selector, attrName)
 
 	if err != nil {
 		return err
@@ -114,13 +124,7 @@ func (player *Player) PlayContainValueAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 
-	el, err := player.FindElement(selector)
-
-	if err != nil {
-		return err
-	}
-
-	value, err := el.GetAttribute("value")
+	value, err := player.getAttribute(selector, "value")
 
 	if err != nil {
 		return err
@@ -135,13 +139,7 @@ func (player *Player) PlayEqualValueAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 
-	el, err := player.FindElement(selector)
-
-	if err != nil {
-		return err
-	}
-
-	value, err := el.GetAttribute("value")
+	value, err := player.getAttribute(selector, "value")
 
 	if err != nil {
 		return err
