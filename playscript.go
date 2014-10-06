@@ -1,11 +1,6 @@
 package main
 
-import (
-	"log"
-	"path/filepath"
-
-	"gopkg.in/yaml.v2"
-)
+import "path/filepath"
 
 type Playscript struct {
 	FullPath   string
@@ -31,13 +26,7 @@ func NewPlayscript(inputFilePath string) (*Playscript, error) {
 	playscript.BaseDir = filepath.Dir(fullPath)
 	playscript.BaseName = filepath.Base(fullPath)
 
-	data, err := ReadFile(fullPath)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = yaml.Unmarshal(data, &playscript)
+	err = LoadYAML(fullPath, &playscript)
 
 	if err != nil {
 		return nil, err

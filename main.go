@@ -16,6 +16,7 @@ type Actions []Action
 type Scenario struct {
 	Name    string  `name`
 	Actions Actions `actions`
+	Include string  `include`
 }
 
 type Scenarios []Scenario

@@ -1,7 +1,7 @@
 - name: Dialog
   actions:
   - command: visit
-    url: dialog.html
+    url: assets/dialog.html
 
   - command: click
     element: .showAlert

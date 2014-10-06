@@ -183,6 +183,7 @@ func (player *Player) PlayExecScriptCommand(action Action) error {
 
 func (player *Player) PlayExecShCommand(action Action) error {
 	script := action["script"]
+	playLog("execute sh", "script=%s", script)
 
 	cmd := exec.Command("sh", "-c", script)
 	cmd.Stdout = os.Stdout

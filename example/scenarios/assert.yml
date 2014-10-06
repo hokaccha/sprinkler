@@ -1,14 +1,14 @@
 - name: Text Assertion
   actions:
   - command: visit
-    url: assert.html
+    url: assets/assert.html
   
   - assert: text_equal
-    element: .foo 
+    element: .foo
     expect: foo
   
   - assert: text_contain
-    element: .foo 
+    element: .foo
     expect: f
 
 - name: Attributes assertion
@@ -101,7 +101,7 @@
     expect: http://example.com/
 
   - command: visit
-    url: assert.html
+    url: assets/assert.html
 
   - assert: url_contain
-    expect: assert.html
+    expect: assets/assert.html

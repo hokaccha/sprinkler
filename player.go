@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"path/filepath"
 	"reflect"
 
 	"github.com/sourcegraph/go-selenium"
@@ -32,23 +33,18 @@ func (player *Player) Play() (statusCode int) {
 	defer wd.Quit()
 
 	err = player.PlayActions(player.playscript.Before)
-
 	if err != nil {
 		log.Println(err)
 		return 1
 	}
 
-	for _, scenario := range player.playscript.Scenarios {
-		err = player.PlayScenario(scenario)
-
-		if err != nil {
-			log.Println(err)
-			return 1
-		}
+	err = player.PlayScenarios(player.playscript.Scenarios)
+	if err != nil {
+		log.Println(err)
+		return 1
 	}
 
 	err = player.PlayActions(player.playscript.After)
-
 	if err != nil {
 		log.Println(err)
 		return 1
@@ -65,6 +61,34 @@ func (player *Player) Play() (statusCode int) {
 	fmt.Printf("Success: %d  Fail: %d\n", player.successCount, player.failCount)
 
 	return statusCode
+}
+
+func (player *Player) LoadInclude(path string, scenarios *Scenarios) error {
+	fullPath := filepath.Join(player.playscript.BaseDir, path)
+	return LoadYAML(fullPath, scenarios)
+}
+
+func (player *Player) PlayScenarios(scenarios Scenarios) error {
+	var err error
+
+	for _, scenario := range scenarios {
+		if scenario.Include != "" {
+			scenarios = Scenarios{}
+			err = player.LoadInclude(scenario.Include, &scenarios)
+			if err != nil {
+				return err
+			}
+			player.PlayScenarios(scenarios)
+		} else {
+			err = player.PlayScenario(scenario)
+
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {

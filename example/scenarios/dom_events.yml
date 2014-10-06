@@ -1,7 +1,7 @@
 - name: Dom Events
   actions:
   - command: visit
-    url: dom_events.html
+    url: assets/dom_events.html
 
   - assert: text_equal
     element: .log

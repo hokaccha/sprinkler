@@ -17,12 +17,9 @@ after_each:
   script: echo "after each!"
 
 scenarios:
-- name: Sample1
-  actions:
-  - command: exec_sh
-    script: echo "main1"
-
-- name: Sample2
-  actions:
-  - command: exec_sh
-    script: echo "main2"
+- include: scenarios/assert.yml
+- include: scenarios/dom_events.yml
+- include: scenarios/dialog.yml
+- include: scenarios/exec_script.yml
+- include: scenarios/wait.yml
+- include: scenarios/google_search.yml

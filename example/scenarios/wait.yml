@@ -1,7 +1,7 @@
 - name: Wait
   actions:
   - command: visit
-    url: wait.html
+    url: assets/wait.html
 
   - command: wait_for_element
     element: .el

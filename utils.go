@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
 var reHttpProto = regexp.MustCompile("^https?://")
@@ -57,4 +59,14 @@ func ReadFile(path string) ([]byte, error) {
 	defer reader.Close()
 
 	return ioutil.ReadAll(reader)
+}
+
+func LoadYAML(path string, out interface{}) error {
+	data, err := ReadFile(path)
+
+	if err != nil {
+		return err
+	}
+
+	return yaml.Unmarshal(data, out)
 }
