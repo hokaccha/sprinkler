@@ -39,7 +39,7 @@ func (player *Player) Play() {
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
-	Debug("Play - %s", scenario.Name)
+	fmt.Printf("\n## %s\n\n", scenario.Name)
 
 	for _, action := range scenario.Actions {
 		_err := player.PlayAction(action)

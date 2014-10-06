@@ -196,7 +196,7 @@ func (player *Player) PlayValueEqualAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayCssAssert(action Action) error {
+func (player *Player) PlayCssPropertyEqualAssert(action Action) error {
 	selector := action["element"]
 	propertyName := action["property"]
 	expected := action["expected"]
@@ -218,7 +218,7 @@ func (player *Player) PlayCssAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayLengthAssert(action Action) error {
+func (player *Player) PlayElementLengthEqualAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 

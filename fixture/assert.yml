@@ -36,19 +36,19 @@
 
 - name: CSS property assertion
   actions:
-  - assert: css
+  - assert: css_property_equal
     element: div
     property: color
     expected: rgba(255, 0, 0, 1)
 
-  - assert: css
+  - assert: css_property_equal
     element: div
     property: font-size
     expected: 14px
 
 - name: Element assertion
   actions:
-  - assert: length
+  - assert: element_length_equal
     element: ul > li
     expected: 3
 
