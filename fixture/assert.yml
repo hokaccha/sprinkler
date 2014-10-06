@@ -81,3 +81,17 @@
 
   - assert: element_hidden
     element: .show
+
+- name: URL Assertion
+  actions:
+  - command: visit
+    url: http://example.com/
+
+  - assert: url_equal
+    expected: http://example.com/
+
+  - command: visit
+    url: assert.html
+
+  - assert: url_contain
+    expected: assert.html

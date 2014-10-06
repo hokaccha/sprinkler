@@ -287,3 +287,31 @@ func (player *Player) PlayElementHiddenAssert(action Action) error {
 
 	return nil
 }
+
+func (player *Player) PlayUrlEqualAssert(action Action) error {
+	expected := action["expected"]
+
+	url, err := player.wd.CurrentURL()
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual("url", url, expected)
+
+	return nil
+}
+
+func (player *Player) PlayUrlContainAssert(action Action) error {
+	expected := action["expected"]
+
+	url, err := player.wd.CurrentURL()
+
+	if err != nil {
+		return err
+	}
+
+	assertContain("url", url, expected)
+
+	return nil
+}
