@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -207,7 +208,22 @@ func (player *Player) PlayCssAssert(action Action) error {
 		return err
 	}
 
-	assertEqual(selector + " " + propertyName, value, expected)
+	assertEqual(selector+" "+propertyName, value, expected)
+
+	return nil
+}
+
+func (player *Player) PlayLengthAssert(action Action) error {
+	selector := action["element"]
+	expected := action["expected"]
+
+	els, err := player.FindElements(selector)
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual(selector+" length", strconv.Itoa(len(els)), expected)
 
 	return nil
 }

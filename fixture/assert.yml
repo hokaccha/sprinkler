@@ -45,3 +45,9 @@
     element: div
     property: font-size
     expected: 14px
+
+- name: Element assertion
+  actions:
+  - assert: length
+    element: ul > li
+    expected: 3

@@ -105,3 +105,11 @@ func (player *Player) FindElement(selector string) (selenium.WebElement, error) 
 
 	return player.wd.FindElement(selenium.ByCSSSelector, selector)
 }
+
+func (player *Player) FindElements(selector string) ([]selenium.WebElement, error) {
+	if selector == "" {
+		return nil, fmt.Errorf("selector not defined")
+	}
+
+	return player.wd.FindElements(selenium.ByCSSSelector, selector)
+}
