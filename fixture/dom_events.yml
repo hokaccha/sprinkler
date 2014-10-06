@@ -1,0 +1,41 @@
+- name: Dom Events
+  actions:
+  - command: visit
+    url: dom_events.html
+
+  - assert: equal_text
+    element: .log
+    expected: ""
+
+  - command: click
+    element: .clickBtn
+
+  - assert: equal_text
+    element: .log
+    expected: clicked!
+
+  - command: input
+    element: input[name="test"]
+    value: input value
+
+  - assert: equal_value
+    element: input[name="test"]
+    expected: input value
+
+  - assert: contain_value
+    element: input[name="test"]
+    expected: input
+
+  - command: submit
+    element: .form
+
+  - assert: equal_text
+    element: .log
+    expected: input value
+
+  - command: clear
+    element: input[name="test"]
+
+  - assert: equal_value
+    element: input[name="test"]
+    expected: ""

@@ -80,3 +80,31 @@ func (player *Player) PlayClickCommand(action Action) error {
 
 	return el.Click()
 }
+
+func (player *Player) PlaySubmitCommand(action Action) error {
+	selector := action["element"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	playLog("submit", "element=%s", selector)
+
+	return el.Submit()
+}
+
+func (player *Player) PlayClearCommand(action Action) error {
+	selector := action["element"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	playLog("clear", "element=%s", selector)
+
+	return el.Clear()
+}

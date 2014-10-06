@@ -83,3 +83,45 @@ func (player *Player) PlayContainTextAssert(action Action) error {
 
 	return nil
 }
+
+func (player *Player) PlayContainValueAssert(action Action) error {
+	selector := action["element"]
+	expected := action["expected"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	value, err := el.GetAttribute("value")
+
+	if err != nil {
+		return err
+	}
+
+	assertContain(selector + " value", value, expected)
+
+	return nil
+}
+
+func (player *Player) PlayEqualValueAssert(action Action) error {
+	selector := action["element"]
+	expected := action["expected"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	value, err := el.GetAttribute("value")
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual(selector + " value", value, expected)
+
+	return nil
+}

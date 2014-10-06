@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Sample</title>
+</head>
+<body>
+<div class="log"></div>
+
+<button class="clickBtn">click</button>
+
+<form class="form">
+  <input type="text" name="test">
+</form>
+
+<script src="./jquery-2.1.1.js"></script>
+<script>
+var $log = $('.log');
+
+$('.clickBtn').click(function() {
+  $log.text('clicked!');
+});
+
+$('.form').submit(function(e) {
+  e.preventDefault();
+  $log.text($('input[name="test"]').val());
+});
+</script>
+</body>
+</html>
