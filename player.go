@@ -10,13 +10,14 @@ import (
 
 type Player struct {
 	wd selenium.WebDriver
+	scenarioFile *ScenarioFile
 }
 
-func NewPlayer() *Player {
-	return &Player{}
+func NewPlayer(scenarioFile *ScenarioFile) *Player {
+	return &Player{scenarioFile: scenarioFile}
 }
 
-func (player *Player) Play(scenarios []Scenario) {
+func (player *Player) Play() {
 	caps := selenium.Capabilities(map[string]interface{}{"browserName": "chrome"})
 	url := "http://localhost:4444/wd/hub"
 	wd, err := selenium.NewRemote(caps, url)
@@ -28,7 +29,7 @@ func (player *Player) Play(scenarios []Scenario) {
 	player.wd = wd
 	defer wd.Quit()
 
-	for _, scenario := range scenarios {
+	for _, scenario := range player.scenarioFile.Scenarios {
 		err := player.PlayScenario(scenario)
 
 		if err != nil {
@@ -39,12 +40,6 @@ func (player *Player) Play(scenarios []Scenario) {
 
 func (player *Player) PlayScenario(scenario Scenario) error {
 	Debug("Play - %s", scenario.Name)
-
-	err := player.wd.Get(scenario.URL)
-
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	for _, action := range scenario.Actions {
 		_err := player.PlayAction(action)

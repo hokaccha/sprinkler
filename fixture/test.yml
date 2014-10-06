@@ -1,0 +1,8 @@
+- name: Test
+  actions:
+    - command: visit
+      url: test.html
+
+    - assert: equal_text
+      element: h1
+      expected: foo bar

@@ -22,7 +22,7 @@ func assertContain(subject string, actual string, expected string) {
 }
 
 func assertEqual(subject string, actual string, expected string) {
-	if strings.Contains(actual, expected) {
+	if actual == expected {
 		ok("%s text is '%s'", subject, expected)
 	} else {
 		ng("%s text isn't '%s'", subject, expected)
@@ -38,6 +38,27 @@ func (player *Player) PlayEqualTitleAssert(action Action) error {
 	}
 
 	assertEqual("title", title, expected)
+
+	return nil
+}
+
+func (player *Player) PlayEqualTextAssert(action Action) error {
+	selector := action["element"]
+	expected := action["expected"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	text, err := el.Text()
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual(selector, text, expected)
 
 	return nil
 }

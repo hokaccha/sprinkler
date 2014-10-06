@@ -1,6 +1,8 @@
 - name: Google search
-  url: http://www.google.com
   actions:
+    - command: visit
+      url: http://www.google.com
+
     - command: wait
       interval: 1000
 

@@ -7,7 +7,25 @@ import (
 )
 
 func playLog(command string, message string, args ...interface{}) {
-	Debug("Play command " + command + " - " + message, args...)
+	Debug("Play command "+command+" - "+message, args...)
+}
+
+func (player *Player) PlayVisitCommand(action Action) error {
+	url := NormalizeUrl(action["url"], player.scenarioFile.BaseDir)
+
+	if url == "" {
+		return fmt.Errorf("visit URL is not defined")
+	}
+
+	err := player.wd.Get(url)
+
+	if err != nil {
+		return err
+	}
+
+	playLog("visit", "url=%s", url)
+
+	return nil
 }
 
 func (player *Player) PlayWaitCommand(action Action) error {

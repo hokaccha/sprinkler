@@ -14,22 +14,14 @@ func init() {
 	log.SetFlags(log.Lshortfile)
 }
 
-type Action map[string]string
-
-type Scenario struct {
-	Name    string   `name`
-	URL     string   `url`
-	Actions []Action `actions`
-}
-
 func main() {
 	filePath := ParseCliArgs()
-	scenarios, err := LoadSenarios(filePath)
+	scenarioFile, err := NewSenarioFile(filePath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	player := NewPlayer()
-	player.Play(scenarios)
+	player := NewPlayer(scenarioFile)
+	player.Play()
 }
