@@ -28,12 +28,8 @@ func (player *Player) PlayVisitCommand(action Action) error {
 }
 
 func (player *Player) PlayWaitCommand(action Action) error {
-	interval, ok := action["interval"]
+	interval := action["interval"]
 	playLog("wait", "interval=%s", interval)
-
-	if !ok {
-		return fmt.Errorf("wait interval is not defined")
-	}
 
 	ms, err := strconv.Atoi(interval)
 
