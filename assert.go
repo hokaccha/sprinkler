@@ -232,3 +232,16 @@ func (player *Player) PlayLengthAssert(action Action) error {
 
 	return nil
 }
+
+func (player *Player) PlayElementExistAssert(action Action) error {
+	selector := action["element"]
+
+	_, err := player.FindElement(selector)
+
+	// TODO: See status code
+	ok := err == nil
+	message := fmt.Sprintf("%s exists", selector)
+	test(ok, strconv.FormatBool(ok), message)
+
+	return nil
+}

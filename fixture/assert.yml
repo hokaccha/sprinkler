@@ -51,3 +51,10 @@
   - assert: length
     element: ul > li
     expected: 3
+
+  - assert: element_exist
+    element: .foo
+
+  # fail
+  - assert: element_exist
+    element: .notExist
