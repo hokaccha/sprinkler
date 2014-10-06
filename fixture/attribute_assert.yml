@@ -1,0 +1,19 @@
+- name: Attributes assertion
+  actions:
+  - command: visit
+    url: attribute_assert.html
+
+  - assert: attribute
+    element: .el
+    name: data-foo
+    expected: "bar"
+
+  - assert: attribute
+    element: .el
+    name: data-baz
+    expected: ""
+
+  - assert: attribute
+    element: .el
+    name: data-baz
+    expected: null

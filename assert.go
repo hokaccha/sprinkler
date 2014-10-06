@@ -84,6 +84,32 @@ func (player *Player) PlayContainTextAssert(action Action) error {
 	return nil
 }
 
+func (player *Player) PlayAttributeAssert(action Action) error {
+	selector := action["element"]
+	attrName := action["name"]
+	expected := action["expected"]
+
+	if attrName == "" {
+		return fmt.Errorf("Attribute name is not defined")
+	}
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	value, err := el.GetAttribute(attrName)
+
+	if err != nil {
+		return err
+	}
+
+	assertEqual(selector + "[" + attrName + "]", value, expected)
+
+	return nil
+}
+
 func (player *Player) PlayContainValueAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]

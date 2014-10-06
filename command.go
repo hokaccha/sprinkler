@@ -7,7 +7,7 @@ import (
 )
 
 func playLog(command string, message string, args ...interface{}) {
-	Debug("Play command "+command+" - "+message, args...)
+	Debug("Play command "+command+" - " + message, args...)
 }
 
 func (player *Player) PlayVisitCommand(action Action) error {
