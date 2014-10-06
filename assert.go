@@ -6,39 +6,44 @@ import (
 	"strings"
 )
 
-func ok(message string, args ...interface{}) {
-	fmt.Printf("\033[32mOK\033[0m - "+message+"\n", args...)
+func showOK(message string) {
+	fmt.Printf("\033[32mOK\033[0m - %s\n", message)
 }
 
-func ng(message string, args ...interface{}) {
-	fmt.Printf("\033[31mNG\033[0m - "+message+"\n", args...)
+func showNG(message string, actual string) {
+	fmt.Printf("\033[31mNG\033[0m - %s - \033[33mActual\033[0m: %s\n", message, actual)
 }
 
-func assertContain(subject string, actual string, expected string) {
-	if strings.Contains(actual, expected) {
-		ok("%s contains '%s'", subject, expected)
+func test(ok bool, actual, message string) {
+	if ok {
+		showOK(message)
 	} else {
-		ng("%s doesn't contain '%s'", subject, expected)
+		showNG(message, actual)
 	}
 }
 
-func assertEqual(subject string, actual string, expected string) {
-	if actual == expected {
-		ok("%s is '%s'", subject, expected)
-	} else {
-		ng("%s isn't '%s'", subject, expected)
-	}
+func assertEqual(subject, actual, expected string) {
+	message := fmt.Sprintf("%s is '%s'", subject, expected)
+	ok := actual == expected
+
+	test(ok, actual, message)
+}
+
+func assertContain(subject, actual, expected string) {
+	message := fmt.Sprintf("%s contains '%s'", subject, expected)
+	ok := strings.Contains(actual, expected)
+
+	test(ok, actual, message)
 }
 
 func assertPresent(subject string, slice []string, expected string) {
-	if ContainSlice(slice, expected) {
-		ok("%s has '%s'", subject, expected)
-	} else {
-		ng("%s doesn't have '%s'", subject, expected)
-	}
+	message := fmt.Sprintf("%s has '%s'", subject, expected)
+	ok := ContainSlice(slice, expected)
+
+	test(ok, fmt.Sprintf("%s", slice), message)
 }
 
-func (player *Player) getAttribute(selector string, name string) (string, error) {
+func (player *Player) getAttribute(selector, name string) (string, error) {
 	if name == "" {
 		return "", fmt.Errorf("Attribute name is not defined")
 	}
