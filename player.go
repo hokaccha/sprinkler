@@ -9,15 +9,17 @@ import (
 )
 
 type Player struct {
-	wd selenium.WebDriver
+	wd           selenium.WebDriver
 	scenarioFile *ScenarioFile
+	successCount int
+	failCount    int
 }
 
 func NewPlayer(scenarioFile *ScenarioFile) *Player {
 	return &Player{scenarioFile: scenarioFile}
 }
 
-func (player *Player) Play() {
+func (player *Player) Play() (statusCode int) {
 	caps := selenium.Capabilities(map[string]interface{}{"browserName": "chrome"})
 	url := "http://localhost:4444/wd/hub"
 	wd, err := selenium.NewRemote(caps, url)
@@ -34,18 +36,31 @@ func (player *Player) Play() {
 
 		if err != nil {
 			log.Println(err)
+			return 1
 		}
 	}
+
+	fmt.Print("\n")
+	if player.failCount == 0 {
+		fmt.Println("Result: \033[32mSUCCESS\033[0m")
+	} else {
+		statusCode = 1
+		fmt.Println("Result: \033[31mFAIL\033[0m")
+	}
+
+	fmt.Printf("Success: %d  Fail: %d\n", player.successCount, player.failCount)
+
+	return statusCode
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
 	fmt.Printf("\n## %s\n\n", scenario.Name)
 
 	for _, action := range scenario.Actions {
-		_err := player.PlayAction(action)
+		err := player.PlayAction(action)
 
-		if _err != nil {
-			log.Println(_err)
+		if err != nil {
+			return err
 		}
 	}
 

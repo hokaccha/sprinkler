@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/sourcegraph/go-selenium"
 	"github.com/visionmedia/go-debug"
@@ -23,5 +24,7 @@ func main() {
 	}
 
 	player := NewPlayer(scenarioFile)
-	player.Play()
+	statusCode := player.Play()
+
+	os.Exit(statusCode)
 }
