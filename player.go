@@ -1,10 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"strconv"
-	"strings"
-	"time"
+	"reflect"
 
 	"github.com/sourcegraph/go-selenium"
 )
@@ -39,7 +38,7 @@ func (player *Player) Play(scenarios []Scenario) {
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
-	Debug("Play: %s", scenario.Name)
+	Debug("Play - %s", scenario.Name)
 
 	err := player.wd.Get(scenario.URL)
 
@@ -58,18 +57,15 @@ func (player *Player) PlayScenario(scenario Scenario) error {
 	return nil
 }
 
-func (player *Player) PlayAction(action map[string]string) error {
+func (player *Player) PlayAction(action Action) error {
 	_, isAssert := action["assert"]
-	_, isTrigger := action["trigger"]
-	_, isWait := action["wait"]
+	_, isCommand := action["command"]
 
 	switch {
 	case isAssert:
 		return player.PlayAssertAction(action)
-	case isTrigger:
-		return player.PlayTriggerAction(action)
-	case isWait:
-		return player.PlayWaitAction(action)
+	case isCommand:
+		return player.PlayCommandAction(action)
 	default:
 		log.Printf("Unknown action: %s", action["action"])
 	}
@@ -77,74 +73,40 @@ func (player *Player) PlayAction(action map[string]string) error {
 	return nil
 }
 
-func (player *Player) PlayAssertAction(action map[string]string) error {
+func (player *Player) PlayAssertAction(action Action) error {
 	assert := action["assert"]
+	methodName := fmt.Sprintf("Play%sAssert", ToCamelCase(assert))
+	method := reflect.ValueOf(player).MethodByName(methodName)
 
-	switch assert {
-	case "equal_title":
-		title, err := player.wd.Title()
-		if err != nil {
-			return err
-		}
-		if title == action["expected"] {
-			OK("title text is '%s'", action["expected"])
-		} else {
-			NG("title text is not '%s'", action["expected"])
-		}
-	case "contain_text":
-		el, err := player.wd.FindElement(selenium.ByCSSSelector, action["element"])
-		if err != nil {
-			return err
-		}
-
-		text, err := el.Text()
-
-		if err != nil {
-			return err
-		}
-
-		if strings.Contains(text, action["expected"]) {
-			OK("%s text contains '%s'", action["element"], action["expected"])
-		} else {
-			NG("%s text doesn't contain '%s'", action["element"], action["expected"])
-		}
-	default:
-		log.Printf("warn: Unknown assert %s", assert)
+	if !method.IsValid() {
+		return fmt.Errorf("Unknown assert %s", assert)
 	}
 
-	return nil
+	result := method.Call([]reflect.Value{reflect.ValueOf(action)})
+	err, _ := result[0].Interface().(error)
+
+	return err
 }
 
-func (player *Player) PlayTriggerAction(action map[string]string) error {
-	trigger := action["trigger"]
-	el, err := player.wd.FindElement(selenium.ByCSSSelector, action["element"])
+func (player *Player) PlayCommandAction(action Action) error {
+	command := action["command"]
+	methodName := fmt.Sprintf("Play%sCommand", ToCamelCase(command))
+	method := reflect.ValueOf(player).MethodByName(methodName)
 
-	if err != nil {
-		return err
+	if !method.IsValid() {
+		return fmt.Errorf("Unknown command %s", command)
 	}
 
-	if trigger == "input" {
-		el.SendKeys(action["value"])
-	}
+	result := method.Call([]reflect.Value{reflect.ValueOf(action)})
+	err, _ := result[0].Interface().(error)
 
-	if trigger == "click" {
-		el.Click()
-	}
-
-	return nil
+	return err
 }
 
-func (player *Player) PlayWaitAction(action map[string]string) error {
-	ms, err := strconv.Atoi(action["wait"])
-
-	if err != nil {
-		log.Println("Warn: Wait time not found")
-		return nil
+func (player *Player) FindElement(selector string) (selenium.WebElement, error) {
+	if selector == "" {
+		return nil, fmt.Errorf("selector not defined")
 	}
 
-	Debug("Wait %dms", ms)
-
-	time.Sleep(time.Duration(ms) * time.Millisecond)
-
-	return nil
+	return player.wd.FindElement(selenium.ByCSSSelector, selector)
 }
