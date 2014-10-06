@@ -1,23 +1,29 @@
 - name: Google search
-  url: http://www.google.com
   actions:
-    - wait: 1000
+    - command: visit
+      url: http://www.google.com
+
+    - command: wait
+      interval: 1000
 
     - assert: equal_title
       expected: Google
 
-    - wait: 1000
+    - command: wait
+      interval: 1000
 
-    - trigger: input
+    - command: input
       value: hoge
       element: input[type="text"]
 
-    - wait: 1000
+    - command: wait
+      interval: 1000
 
-    - trigger: click
+    - command: click
       element: button[name="btnG"]
 
-    - wait: 1000
+    - command: wait
+      interval: 1000
 
     - assert: contain_text
       element: "#main"
