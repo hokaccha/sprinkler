@@ -57,7 +57,7 @@ func (player *Player) getAttribute(selector string, name string) (string, error)
 	return value, nil
 }
 
-func (player *Player) PlayEqualTitleAssert(action Action) error {
+func (player *Player) PlayTitleEqualAssert(action Action) error {
 	expected := action["expected"]
 	title, err := player.wd.Title()
 
@@ -70,7 +70,7 @@ func (player *Player) PlayEqualTitleAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayEqualTextAssert(action Action) error {
+func (player *Player) PlayTextEqualAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 
@@ -91,7 +91,7 @@ func (player *Player) PlayEqualTextAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayContainTextAssert(action Action) error {
+func (player *Player) PlayTextContainAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 
@@ -160,7 +160,7 @@ func (player *Player) PlayAttributePresentAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayContainValueAssert(action Action) error {
+func (player *Player) PlayValueContainAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 
@@ -175,7 +175,7 @@ func (player *Player) PlayContainValueAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayEqualValueAssert(action Action) error {
+func (player *Player) PlayValueEqualAssert(action Action) error {
 	selector := action["element"]
 	expected := action["expected"]
 

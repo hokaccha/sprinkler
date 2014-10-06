@@ -6,7 +6,7 @@
     - command: wait
       interval: 1000
 
-    - assert: equal_title
+    - assert: title_equal
       expected: Google
 
     - command: wait
@@ -25,6 +25,6 @@
     - command: wait
       interval: 1000
 
-    - assert: contain_text
+    - assert: text_contain
       element: "#main"
       expected: hoge

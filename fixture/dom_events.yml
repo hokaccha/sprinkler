@@ -3,14 +3,14 @@
   - command: visit
     url: dom_events.html
 
-  - assert: equal_text
+  - assert: text_equal
     element: .log
     expected: ""
 
   - command: click
     element: .clickBtn
 
-  - assert: equal_text
+  - assert: text_equal
     element: .log
     expected: clicked!
 
@@ -18,24 +18,24 @@
     element: input[name="test"]
     value: input value
 
-  - assert: equal_value
+  - assert: value_equal
     element: input[name="test"]
     expected: input value
 
-  - assert: contain_value
+  - assert: value_contain
     element: input[name="test"]
     expected: input
 
   - command: submit
     element: .form
 
-  - assert: equal_text
+  - assert: text_equal
     element: .log
     expected: input value
 
   - command: clear
     element: input[name="test"]
 
-  - assert: equal_value
+  - assert: value_equal
     element: input[name="test"]
     expected: ""
