@@ -16,17 +16,17 @@ func ng(message string, args ...interface{}) {
 
 func assertContain(subject string, actual string, expected string) {
 	if strings.Contains(actual, expected) {
-		ok("%s text contains '%s'", subject, expected)
+		ok("%s contains '%s'", subject, expected)
 	} else {
-		ng("%s text doesn't contain '%s'", subject, expected)
+		ng("%s doesn't contain '%s'", subject, expected)
 	}
 }
 
 func assertEqual(subject string, actual string, expected string) {
 	if actual == expected {
-		ok("%s text is '%s'", subject, expected)
+		ok("%s is '%s'", subject, expected)
 	} else {
-		ng("%s text isn't '%s'", subject, expected)
+		ng("%s isn't '%s'", subject, expected)
 	}
 }
 
@@ -87,7 +87,7 @@ func (player *Player) PlayTextEqualAssert(action Action) error {
 		return err
 	}
 
-	assertEqual(selector, text, expected)
+	assertEqual(selector+" text", text, expected)
 
 	return nil
 }
@@ -108,7 +108,7 @@ func (player *Player) PlayTextContainAssert(action Action) error {
 		return err
 	}
 
-	assertContain(selector, text, expected)
+	assertContain(selector+" text", text, expected)
 
 	return nil
 }
