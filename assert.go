@@ -241,7 +241,49 @@ func (player *Player) PlayElementExistAssert(action Action) error {
 	// TODO: See status code
 	ok := err == nil
 	message := fmt.Sprintf("%s exists", selector)
-	test(ok, strconv.FormatBool(ok), message)
+	test(ok, "not exists", message)
+
+	return nil
+}
+
+func (player *Player) PlayElementVisibleAssert(action Action) error {
+	selector := action["element"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	visible, err := el.IsDisplayed()
+
+	if err != nil {
+		return err
+	}
+
+	message := fmt.Sprintf("%s is visible", selector)
+	test(visible, "hidden", message)
+
+	return nil
+}
+
+func (player *Player) PlayElementHiddenAssert(action Action) error {
+	selector := action["element"]
+
+	el, err := player.FindElement(selector)
+
+	if err != nil {
+		return err
+	}
+
+	visible, err := el.IsDisplayed()
+
+	if err != nil {
+		return err
+	}
+
+	message := fmt.Sprintf("%s is hidden", selector)
+	test(!visible, "visible", message)
 
 	return nil
 }

@@ -58,3 +58,26 @@
   # fail
   - assert: element_exist
     element: .notExist
+
+  - assert: element_visible
+    element: .show
+
+  - assert: element_hidden
+    element: .hide
+
+  # fail
+  - assert: element_visible
+    element: .hide
+
+  # fail
+  - assert: element_hidden
+    element: .show
+
+  - command: click
+    element: .toggleShow
+
+  - assert: element_visible
+    element: .hide
+
+  - assert: element_hidden
+    element: .show

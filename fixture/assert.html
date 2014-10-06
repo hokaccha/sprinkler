@@ -19,5 +19,18 @@
   <li>bar</li>
   <li>baz</li>
 </ul>
+
+<div class="show">show</div>
+<div class="hide" hidden>hide</div>
+
+<button class="toggleShow">toggle show</button>
+
+<script src="./jquery-2.1.1.js"></script>
+<script>
+$('.toggleShow').click(function() {
+  $('.show').hide();
+  $('.hide').show();
+});
+</script>
 </body>
 </html>
