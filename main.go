@@ -10,6 +10,16 @@ import (
 
 var Debug = debug.Debug("sprinkler")
 
+type Action map[string]string
+type Actions []Action
+
+type Scenario struct {
+	Name    string  `name`
+	Actions Actions `actions`
+}
+
+type Scenarios []Scenario
+
 func init() {
 	selenium.Log = nil
 	log.SetFlags(log.Lshortfile)
