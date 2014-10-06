@@ -1,9 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
 
 	"gopkg.in/yaml.v2"
@@ -50,17 +48,7 @@ func NewSenarioFile(inputFilePath string) (*ScenarioFile, error) {
 
 func LoadSenarios(filePath string) (Scenarios, error) {
 	scenarios := Scenarios{}
-	reader, err := os.Open(filePath)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	Debug("Load %s", filePath)
-
-	defer reader.Close()
-
-	data, err := ioutil.ReadAll(reader)
+	data, err := ReadFile(filePath)
 
 	if err != nil {
 		log.Fatal(err)

@@ -1,0 +1,20 @@
+- name: Execute script
+  actions:
+  - command: visit
+    url: exec_script.html
+
+  - command: exec_script
+    script: console.log('hoge')
+
+  - command: exec_script
+    src: sinon-1.10.3.js
+
+  - command: exec_script
+    script: "sinon.stub(obj, 'method', function() { $('.foo').text('baz'); })"
+
+  - command: exec_script
+    script: obj.method()
+
+  - assert: text_equal
+    element: .foo
+    expect: baz

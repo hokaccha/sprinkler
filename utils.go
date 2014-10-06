@@ -1,6 +1,8 @@
 package main
 
 import (
+	"io/ioutil"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -43,4 +45,16 @@ func ContainSlice(s []string, val string) bool {
 	}
 
 	return false
+}
+
+func ReadFile(path string) ([]byte, error) {
+	reader, err := os.Open(path)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer reader.Close()
+
+	return ioutil.ReadAll(reader)
 }

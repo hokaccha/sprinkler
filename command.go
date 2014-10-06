@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -149,4 +150,31 @@ func (player *Player) PlayAcceptAlertCommand(action Action) error {
 func (player *Player) PlayDismissAlertCommand(action Action) error {
 	playLog("dismiss alert", "")
 	return player.wd.DismissAlert()
+}
+
+func (player *Player) PlayExecScriptCommand(action Action) error {
+	script := action["script"]
+	src := action["src"]
+
+	if src == "" {
+		playLog("execute script", "script=%s", script)
+	} else {
+		playLog("execute script", "src=%s", src)
+		srcPath := filepath.Join(player.scenarioFile.BaseDir, src)
+		data, err := ReadFile(srcPath)
+
+		if err != nil {
+			return err
+		}
+
+		script = string(data)
+	}
+
+	_, err := player.wd.ExecuteScript(script, nil)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
