@@ -3,17 +3,33 @@
   - command: visit
     url: attribute_assert.html
 
-  - assert: attribute
-    element: .el
+  - assert: attribute_equal
+    element: div
     name: data-foo
     expected: "bar"
 
-  - assert: attribute
-    element: .el
+  - assert: attribute_contain
+    element: div
+    name: data-bar
+    expected: "c"
+
+  - assert: attribute_equal
+    element: div
     name: data-baz
     expected: ""
 
-  - assert: attribute
-    element: .el
-    name: data-baz
-    expected: null
+  - assert: attribute_present
+    element: div
+    name: class
+    expected: foo
+
+  - assert: attribute_present
+    element: div
+    name: class
+    expected: baz
+
+  # fail
+  - assert: attribute_present
+    element: div
+    name: class
+    expected: hoge

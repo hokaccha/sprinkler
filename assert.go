@@ -29,6 +29,14 @@ func assertEqual(subject string, actual string, expected string) {
 	}
 }
 
+func assertPresent(subject string, slice []string, expected string) {
+	if ContainSlice(slice, expected) {
+		ok("%s has '%s'", subject, expected)
+	} else {
+		ng("%s doesn't have '%s'", subject, expected)
+	}
+}
+
 func (player *Player) getAttribute(selector string, name string) (string, error) {
 	if name == "" {
 		return "", fmt.Errorf("Attribute name is not defined")
@@ -104,7 +112,7 @@ func (player *Player) PlayContainTextAssert(action Action) error {
 	return nil
 }
 
-func (player *Player) PlayAttributeAssert(action Action) error {
+func (player *Player) PlayAttributeEqualAssert(action Action) error {
 	selector := action["element"]
 	attrName := action["name"]
 	expected := action["expected"]
@@ -115,7 +123,39 @@ func (player *Player) PlayAttributeAssert(action Action) error {
 		return err
 	}
 
-	assertEqual(selector + "[" + attrName + "]", value, expected)
+	assertEqual(selector+"["+attrName+"]", value, expected)
+
+	return nil
+}
+
+func (player *Player) PlayAttributeContainAssert(action Action) error {
+	selector := action["element"]
+	attrName := action["name"]
+	expected := action["expected"]
+
+	value, err := player.getAttribute(selector, attrName)
+
+	if err != nil {
+		return err
+	}
+
+	assertContain(selector+"["+attrName+"]", value, expected)
+
+	return nil
+}
+
+func (player *Player) PlayAttributePresentAssert(action Action) error {
+	selector := action["element"]
+	attrName := action["name"]
+	expected := action["expected"]
+
+	value, err := player.getAttribute(selector, attrName)
+
+	if err != nil {
+		return err
+	}
+
+	assertPresent(selector+"["+attrName+"]", strings.Fields(value), expected)
 
 	return nil
 }
@@ -130,7 +170,7 @@ func (player *Player) PlayContainValueAssert(action Action) error {
 		return err
 	}
 
-	assertContain(selector + " value", value, expected)
+	assertContain(selector+" value", value, expected)
 
 	return nil
 }
@@ -145,7 +185,7 @@ func (player *Player) PlayEqualValueAssert(action Action) error {
 		return err
 	}
 
-	assertEqual(selector + " value", value, expected)
+	assertEqual(selector+" value", value, expected)
 
 	return nil
 }

@@ -31,3 +31,13 @@ func TestNormalizeUrl(t *testing.T) {
 	test("foo/bar", "/path/to/dir", "file:///path/to/dir/foo/bar")
 	test("../foo/bar", "/path/to/dir", "file:///path/to/foo/bar")
 }
+
+func TestContainSlice(t *testing.T) {
+	if ContainSlice([]string{"foo", "bar", "baz"}, "baz") == false {
+		t.Errorf("ContainSlice should return true")
+	}
+
+	if ContainSlice([]string{"foo", "bar", "baz"}, "hoge") == true {
+		t.Errorf("ContainSlice should return false")
+	}
+}

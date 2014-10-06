@@ -34,3 +34,13 @@ func NormalizeUrl(url string, baseDir string) string {
 
 	return "file://" + filepath.Join(baseDir, url)
 }
+
+func ContainSlice(s []string, val string) bool {
+	for _, v := range s {
+		if val == v {
+			return true
+		}
+	}
+
+    return false
+}
