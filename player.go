@@ -10,13 +10,13 @@ import (
 
 type Player struct {
 	wd           selenium.WebDriver
-	scenarioFile *ScenarioFile
+	playscript   *Playscript
 	successCount int
 	failCount    int
 }
 
-func NewPlayer(scenarioFile *ScenarioFile) *Player {
-	return &Player{scenarioFile: scenarioFile}
+func NewPlayer(playscript *Playscript) *Player {
+	return &Player{playscript: playscript}
 }
 
 func (player *Player) Play() (statusCode int) {
@@ -31,13 +31,27 @@ func (player *Player) Play() (statusCode int) {
 	player.wd = wd
 	defer wd.Quit()
 
-	for _, scenario := range player.scenarioFile.Scenarios {
-		err := player.PlayScenario(scenario)
+	err = player.PlayActions(player.playscript.Before)
+
+	if err != nil {
+		log.Println(err)
+		return 1
+	}
+
+	for _, scenario := range player.playscript.Scenarios {
+		err = player.PlayScenario(scenario)
 
 		if err != nil {
 			log.Println(err)
 			return 1
 		}
+	}
+
+	err = player.PlayActions(player.playscript.After)
+
+	if err != nil {
+		log.Println(err)
+		return 1
 	}
 
 	fmt.Print("\n")
@@ -56,7 +70,26 @@ func (player *Player) Play() (statusCode int) {
 func (player *Player) PlayScenario(scenario Scenario) error {
 	fmt.Printf("\n## %s\n\n", scenario.Name)
 
-	for _, action := range scenario.Actions {
+	err := player.PlayActions(player.playscript.BeforeEach)
+	if err != nil {
+		return err
+	}
+
+	err = player.PlayActions(scenario.Actions)
+	if err != nil {
+		return err
+	}
+
+	err = player.PlayActions(player.playscript.AfterEach)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (player *Player) PlayActions(actions Actions) error {
+	for _, action := range actions {
 		err := player.PlayAction(action)
 
 		if err != nil {

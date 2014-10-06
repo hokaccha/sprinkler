@@ -17,14 +17,13 @@ func init() {
 
 func main() {
 	filePath := ParseCliArgs()
-	scenarioFile, err := NewSenarioFile(filePath)
+	playscript, err := NewPlayscript(filePath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	player := NewPlayer(scenarioFile)
-	statusCode := player.Play()
+	statusCode := NewPlayer(playscript).Play()
 
 	os.Exit(statusCode)
 }

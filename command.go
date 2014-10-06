@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -12,7 +14,7 @@ func playLog(command string, message string, args ...interface{}) {
 }
 
 func (player *Player) PlayVisitCommand(action Action) error {
-	url := NormalizeUrl(action["url"], player.scenarioFile.BaseDir)
+	url := NormalizeUrl(action["url"], player.playscript.BaseDir)
 	playLog("visit", "url=%s", url)
 
 	if url == "" {
@@ -160,7 +162,7 @@ func (player *Player) PlayExecScriptCommand(action Action) error {
 		playLog("execute script", "script=%s", script)
 	} else {
 		playLog("execute script", "src=%s", src)
-		srcPath := filepath.Join(player.scenarioFile.BaseDir, src)
+		srcPath := filepath.Join(player.playscript.BaseDir, src)
 		data, err := ReadFile(srcPath)
 
 		if err != nil {
@@ -177,4 +179,14 @@ func (player *Player) PlayExecScriptCommand(action Action) error {
 	}
 
 	return nil
+}
+
+func (player *Player) PlayExecShCommand(action Action) error {
+	script := action["script"]
+
+	cmd := exec.Command("sh", "-c", script)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }

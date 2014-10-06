@@ -1,0 +1,28 @@
+browsers: ["chrome"]
+
+before:
+- command: exec_sh
+  script: echo "before!"
+
+after:
+- command: exec_sh
+  script: echo "after!"
+
+before_each:
+- command: exec_sh
+  script: echo "before each!"
+
+after_each:
+- command: exec_sh
+  script: echo "after each!"
+
+scenarios:
+- name: Sample1
+  actions:
+  - command: exec_sh
+    script: echo "main1"
+
+- name: Sample2
+  actions:
+  - command: exec_sh
+    script: echo "main2"
