@@ -22,4 +22,4 @@ scenarios:
 - include: scenarios/dialog.yml
 - include: scenarios/exec_script.yml
 - include: scenarios/wait.yml
-- include: scenarios/google_search.yml
+- include: scenarios/google.yml
