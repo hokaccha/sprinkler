@@ -8,13 +8,13 @@ import (
 )
 
 const USAGE = `
-  Usage: sprinkler scenario.yml
-  
-  Options:
-    --tags=TAGS, -t TAGS  only run scenarios tagged with these values
-    --skip-tags=TAGS      only run scenarios whose tags do not match these values
-    --version, -v         print the version
-    --help, -h            show help
+Usage: sprinkler scenario.yml
+
+Options:
+  --tags=TAGS, -t TAGS  only run scenarios tagged with these values
+  --skip-tags=TAGS      only run scenarios whose tags do not match these values
+  --version, -v         print the version
+  --help, -h            show help
 `
 
 var version = flag.Bool("version", false, "")
