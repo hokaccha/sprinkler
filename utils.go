@@ -72,7 +72,7 @@ func LoadYAML(path string, out interface{}) error {
 }
 
 func HasIntersection(a, b []string) bool {
-	for _, v := range(a) {
+	for _, v := range a {
 		if ContainSlice(b, v) {
 			return true
 		}
