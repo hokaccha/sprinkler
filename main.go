@@ -14,9 +14,10 @@ type Action map[string]string
 type Actions []Action
 
 type Scenario struct {
-	Name    string  `name`
-	Actions Actions `actions`
-	Include string  `include`
+	Name    string   `name`
+	Actions Actions  `actions`
+	Include string   `include`
+	Tags    []string `tags`
 }
 
 type Scenarios []Scenario
@@ -27,14 +28,14 @@ func init() {
 }
 
 func main() {
-	filePath := ParseCliArgs()
+	filePath, opts := ParseCliArgs()
 	playscript, err := NewPlayscript(filePath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	statusCode := NewPlayer(playscript).Play()
+	statusCode := NewPlayer(playscript, opts).Play()
 
 	os.Exit(statusCode)
 }

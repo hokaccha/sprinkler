@@ -1,4 +1,5 @@
 - name: Google search
+  tags: [google]
   actions:
     - command: visit
       url: http://www.google.com

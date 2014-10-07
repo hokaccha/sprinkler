@@ -14,10 +14,14 @@ type Player struct {
 	playscript   *Playscript
 	successCount int
 	failCount    int
+	opts         *Options
 }
 
-func NewPlayer(playscript *Playscript) *Player {
-	return &Player{playscript: playscript}
+func NewPlayer(playscript *Playscript, opts *Options) *Player {
+	return &Player{
+		playscript: playscript,
+		opts:       opts,
+	}
 }
 
 func (player *Player) Play() (statusCode int) {
@@ -92,6 +96,14 @@ func (player *Player) PlayScenarios(scenarios Scenarios) error {
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
+	if len(player.opts.Tags) > 0 && !HasIntersection(scenario.Tags, player.opts.Tags) {
+		return nil
+	}
+
+	if HasIntersection(scenario.Tags, player.opts.SkipTags) {
+		return nil
+	}
+
 	fmt.Printf("\n## %s\n\n", scenario.Name)
 
 	err := player.PlayActions(player.playscript.BeforeEach)

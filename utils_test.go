@@ -41,3 +41,19 @@ func TestContainSlice(t *testing.T) {
 		t.Errorf("ContainSlice should return false")
 	}
 }
+
+func TestHasIntersection(t *testing.T) {
+	test := func(a, b []string, expected bool) {
+		if HasIntersection(a, b) != expected {
+			t.Errorf("HasIntersection(%#v, %#v) should be %v", a, b, expected)
+		}
+	}
+
+	test([]string{"foo", "bar"}, []string{"baz"}, false)
+	test([]string{}, []string{}, false)
+	test([]string{"foo", "bar"}, []string{}, false)
+	test([]string{}, []string{"foo", "bar"}, false)
+
+	test([]string{"foo", "bar"}, []string{"bar"}, true)
+	test([]string{"foo"}, []string{"foo", "bar"}, true)
+}

@@ -1,4 +1,5 @@
 - name: Dom Events
+  tags: [dom_events]
   actions:
   - command: visit
     url: assets/dom_events.html

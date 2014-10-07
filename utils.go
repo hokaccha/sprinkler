@@ -70,3 +70,13 @@ func LoadYAML(path string, out interface{}) error {
 
 	return yaml.Unmarshal(data, out)
 }
+
+func HasIntersection(a, b []string) bool {
+	for _, v := range(a) {
+		if ContainSlice(b, v) {
+			return true
+		}
+	}
+
+	return false
+}

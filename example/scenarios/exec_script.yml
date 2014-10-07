@@ -1,4 +1,5 @@
 - name: Execute script
+  tags: [exec_script]
   actions:
   - command: visit
     url: assets/exec_script.html

@@ -1,4 +1,5 @@
 - name: Wait
+  tags: [wait]
   actions:
   - command: visit
     url: assets/wait.html

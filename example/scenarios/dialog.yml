@@ -1,4 +1,5 @@
 - name: Dialog
+  tags: [dialog]
   actions:
   - command: visit
     url: assets/dialog.html
