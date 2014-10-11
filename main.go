@@ -28,14 +28,10 @@ func init() {
 }
 
 func main() {
-	filePath, opts := ParseCliArgs()
-	playscript, err := NewPlayscript(filePath)
+	app := NewCliApp()
+	err := app.Run(os.Args)
 
 	if err != nil {
-		log.Fatal(err)
+		os.Exit(1)
 	}
-
-	statusCode := NewPlayer(playscript, opts).Play()
-
-	os.Exit(statusCode)
 }

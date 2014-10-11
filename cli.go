@@ -1,13 +1,14 @@
 package main
 
 import (
-	"flag"
-	"fmt"
+	"log"
 	"os"
 	"strings"
+
+	"github.com/codegangsta/cli"
 )
 
-const USAGE = `
+const helpTemplate = `
 Usage: sprinkler scenario.yml
 
 Options:
@@ -17,45 +18,60 @@ Options:
   --help, -h            show help
 `
 
-var version = flag.Bool("version", false, "")
-var tags = flag.String("tags", "", "")
-var skipTags = flag.String("skip-tags", "", "")
-
-func init() {
-	flag.BoolVar(version, "v", false, "")
-	flag.StringVar(tags, "t", "", "")
-}
-
 type Options struct {
 	Tags     []string
 	SkipTags []string
 }
 
-func ParseCliArgs() (string, *Options) {
-	opts := &Options{}
-
-	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, USAGE[1:])
+func NewCliApp() *cli.App {
+	cli.AppHelpTemplate = helpTemplate[1:]
+	app := cli.NewApp()
+	app.Name = "sprinkler"
+	app.HideHelp = true
+	app.Flags = []cli.Flag{
+		tagFlag,
+		skipTagFlag,
+		cli.HelpFlag,
 	}
+	app.Action = action
 
-	flag.Parse()
+	return app
+}
 
-	if *version == true {
-		fmt.Fprintf(os.Stderr, "sprinkler version: %s\n", Version)
-		os.Exit(0)
-	}
-
-	opts.Tags = splitString(*tags)
-	opts.SkipTags = splitString(*skipTags)
-
-	args := flag.Args()
+func action(c *cli.Context) {
+	args := c.Args()
 
 	if len(args) == 0 {
-		flag.Usage()
-		os.Exit(2)
+		cli.ShowAppHelp(c)
+		os.Exit(1)
 	}
 
-	return args[0], opts
+	playscript, err := NewPlayscript(args[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	opts := &Options{
+		Tags:     splitString(c.String("tags")),
+		SkipTags: splitString(c.String("skip-tags")),
+	}
+
+	statusCode := NewPlayer(playscript, opts).Play()
+
+	os.Exit(statusCode)
+}
+
+var tagFlag = cli.StringFlag{
+	Name:  "tags, t",
+	Value: "",
+	Usage: "only run scenarios tagged with these values",
+}
+
+var skipTagFlag = cli.StringFlag{
+	Name:  "skip-tags",
+	Value: "",
+	Usage: "only run scenarios whose tags do not match these values",
 }
 
 func splitString(str string) []string {
