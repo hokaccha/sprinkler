@@ -1,21 +1,9 @@
 - name: Execute script
   tags: [exec_script]
   actions:
-  - command: visit
-    url: assets/exec_script.html
-
-  - command: exec_script
-    script: console.log('hoge')
-
-  - command: exec_script
-    src: assets/sinon-1.10.3.js
-
-  - command: exec_script
-    script: "sinon.stub(obj, 'method', function() { $('.foo').text('baz'); })"
-
-  - command: exec_script
-    script: obj.method()
-
-  - assert: text_equal
-    element: .foo
-    expect: baz
+  - visit: assets/exec_script.html
+  - exec_script: console.log('hoge')
+  - load_script: assets/sinon-1.10.3.js
+  - exec_script: "sinon.stub(obj, 'method', function() { $('.foo').text('baz'); })"
+  - exec_script: obj.method()
+  - assert_text: { element: .foo, equal: baz }

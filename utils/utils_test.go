@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"testing"
@@ -33,11 +33,11 @@ func TestNormalizeUrl(t *testing.T) {
 }
 
 func TestContainSlice(t *testing.T) {
-	if ContainSlice([]string{"foo", "bar", "baz"}, "baz") == false {
+	if IsContained([]string{"foo", "bar", "baz"}, "baz") == false {
 		t.Errorf("ContainSlice should return true")
 	}
 
-	if ContainSlice([]string{"foo", "bar", "baz"}, "hoge") == true {
+	if IsContained([]string{"foo", "bar", "baz"}, "hoge") == true {
 		t.Errorf("ContainSlice should return false")
 	}
 }

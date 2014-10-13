@@ -18,11 +18,6 @@ Options:
   --help, -h            show help
 `
 
-type Options struct {
-	Tags     []string
-	SkipTags []string
-}
-
 func NewCliApp() *cli.App {
 	cli.AppHelpTemplate = helpTemplate[1:]
 	app := cli.NewApp()
@@ -52,7 +47,7 @@ func action(c *cli.Context) {
 		log.Fatal(err)
 	}
 
-	opts := &Options{
+	opts := &PlayerOpts{
 		Tags:     splitString(c.String("tags")),
 		SkipTags: splitString(c.String("skip-tags")),
 	}

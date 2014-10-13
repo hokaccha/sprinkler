@@ -3,24 +3,31 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
-	"reflect"
 
+	. "github.com/hokaccha/sprinkler/action"
+	. "github.com/hokaccha/sprinkler/utils"
 	"github.com/sourcegraph/go-selenium"
 )
 
-type Player struct {
-	wd           selenium.WebDriver
-	playscript   *Playscript
-	successCount int
-	failCount    int
-	opts         *Options
+type PlayerOpts struct {
+	Tags     []string
+	SkipTags []string
 }
 
-func NewPlayer(playscript *Playscript, opts *Options) *Player {
+type Player struct {
+	Wd           selenium.WebDriver
+	Playscript   *Playscript
+	SuccessCount int
+	FailCount    int
+	Opts         *PlayerOpts
+}
+
+func NewPlayer(playscript *Playscript, opts *PlayerOpts) *Player {
 	return &Player{
-		playscript: playscript,
-		opts:       opts,
+		Playscript: playscript,
+		Opts:       opts,
 	}
 }
 
@@ -33,42 +40,42 @@ func (player *Player) Play() (statusCode int) {
 		log.Fatal(err)
 	}
 
-	player.wd = wd
+	player.Wd = wd
 	defer wd.Quit()
 
-	err = player.PlayActions(player.playscript.Before)
+	err = player.PlayActions(player.Playscript.Before)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return 1
 	}
 
-	err = player.PlayScenarios(player.playscript.Scenarios)
+	err = player.PlayScenarios(player.Playscript.Scenarios)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return 1
 	}
 
-	err = player.PlayActions(player.playscript.After)
+	err = player.PlayActions(player.Playscript.After)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return 1
 	}
 
 	fmt.Print("\n")
-	if player.failCount == 0 {
+	if player.FailCount == 0 {
 		fmt.Println("Result: \033[32mSUCCESS\033[0m")
 	} else {
 		statusCode = 1
 		fmt.Println("Result: \033[31mFAIL\033[0m")
 	}
 
-	fmt.Printf("Success: %d  Fail: %d\n", player.successCount, player.failCount)
+	fmt.Printf("Success: %d  Fail: %d\n", player.SuccessCount, player.FailCount)
 
 	return statusCode
 }
 
 func (player *Player) LoadInclude(path string, scenarios *Scenarios) error {
-	fullPath := filepath.Join(player.playscript.BaseDir, path)
+	fullPath := filepath.Join(player.Playscript.BaseDir, path)
 	return LoadYAML(fullPath, scenarios)
 }
 
@@ -82,7 +89,11 @@ func (player *Player) PlayScenarios(scenarios Scenarios) error {
 			if err != nil {
 				return err
 			}
-			player.PlayScenarios(scenarios)
+
+			err = player.PlayScenarios(scenarios)
+			if err != nil {
+				return err
+			}
 		} else {
 			err = player.PlayScenario(scenario)
 
@@ -96,17 +107,17 @@ func (player *Player) PlayScenarios(scenarios Scenarios) error {
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
-	if len(player.opts.Tags) > 0 && !HasIntersection(scenario.Tags, player.opts.Tags) {
+	if len(player.Opts.Tags) > 0 && !HasIntersection(scenario.Tags, player.Opts.Tags) {
 		return nil
 	}
 
-	if HasIntersection(scenario.Tags, player.opts.SkipTags) {
+	if HasIntersection(scenario.Tags, player.Opts.SkipTags) {
 		return nil
 	}
 
 	fmt.Printf("\n## %s\n\n", scenario.Name)
 
-	err := player.PlayActions(player.playscript.BeforeEach)
+	err := player.PlayActions(player.Playscript.BeforeEach)
 	if err != nil {
 		return err
 	}
@@ -116,7 +127,7 @@ func (player *Player) PlayScenario(scenario Scenario) error {
 		return err
 	}
 
-	err = player.PlayActions(player.playscript.AfterEach)
+	err = player.PlayActions(player.Playscript.AfterEach)
 	if err != nil {
 		return err
 	}
@@ -125,75 +136,38 @@ func (player *Player) PlayScenario(scenario Scenario) error {
 }
 
 func (player *Player) PlayActions(actions Actions) error {
-	for _, action := range actions {
-		err := player.PlayAction(action)
+	for _, actionMap := range actions {
+		for name, params := range actionMap {
+			opts := &ActionOpts{
+				Wd:      player.Wd,
+				BaseDir: player.Playscript.BaseDir,
+				Name:    name,
+				Params:  params,
+			}
+			result, err := RunAction(opts)
 
-		if err != nil {
-			return err
+			if err != nil {
+				actionYAML, _ := ToYAML(actionMap)
+				return fmt.Errorf("%s\n%s", Red("[Error] "+err.Error()), actionYAML)
+			}
+
+			player.HandleActionResult(result)
 		}
 	}
 
 	return nil
 }
 
-func (player *Player) PlayAction(action Action) error {
-	_, isAssert := action["assert"]
-	_, isCommand := action["command"]
-
-	switch {
-	case isAssert:
-		return player.PlayAssertAction(action)
-	case isCommand:
-		return player.PlayCommandAction(action)
-	default:
-		log.Printf("Unknown action: %s", action["action"])
+func (player *Player) HandleActionResult(result *ActionResult) {
+	if result == nil || result.IsAssert == false {
+		return
 	}
 
-	return nil
-}
-
-func (player *Player) PlayAssertAction(action Action) error {
-	assert := action["assert"]
-	methodName := fmt.Sprintf("Play%sAssert", ToCamelCase(assert))
-	method := reflect.ValueOf(player).MethodByName(methodName)
-
-	if !method.IsValid() {
-		return fmt.Errorf("Unknown assert %s", assert)
+	if result.Successed == true {
+		player.SuccessCount++
+	} else {
+		player.FailCount++
 	}
 
-	result := method.Call([]reflect.Value{reflect.ValueOf(action)})
-	err, _ := result[0].Interface().(error)
-
-	return err
-}
-
-func (player *Player) PlayCommandAction(action Action) error {
-	command := action["command"]
-	methodName := fmt.Sprintf("Play%sCommand", ToCamelCase(command))
-	method := reflect.ValueOf(player).MethodByName(methodName)
-
-	if !method.IsValid() {
-		return fmt.Errorf("Unknown command %s", command)
-	}
-
-	result := method.Call([]reflect.Value{reflect.ValueOf(action)})
-	err, _ := result[0].Interface().(error)
-
-	return err
-}
-
-func (player *Player) FindElement(selector string) (selenium.WebElement, error) {
-	if selector == "" {
-		return nil, fmt.Errorf("selector not defined")
-	}
-
-	return player.wd.FindElement(selenium.ByCSSSelector, selector)
-}
-
-func (player *Player) FindElements(selector string) ([]selenium.WebElement, error) {
-	if selector == "" {
-		return nil, fmt.Errorf("selector not defined")
-	}
-
-	return player.wd.FindElements(selenium.ByCSSSelector, selector)
+	fmt.Println(result.Message)
 }

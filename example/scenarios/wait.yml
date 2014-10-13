@@ -1,16 +1,14 @@
 - name: Wait
   tags: [wait]
   actions:
-  - command: visit
-    url: assets/wait.html
+  - visit: assets/wait.html
 
-  - command: wait_for_element
-    element: .el
-    timeout: 3000
+  - wait_for:
+      element: .el
+      timeout: 3000
 
-  - assert: text_equal
-    element: .el
-    expect: foo
+  - assert_text:
+      element: .el
+      equal: foo
 
-  - command: wait
-    interval: 1000
+  - wait: 1000

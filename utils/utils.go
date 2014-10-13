@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"io/ioutil"
@@ -7,8 +7,11 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/visionmedia/go-debug"
 	"gopkg.in/yaml.v2"
 )
+
+var Debug = debug.Debug("sprinkler")
 
 var reHttpProto = regexp.MustCompile("^https?://")
 var reAbsFilePath = regexp.MustCompile("^/")
@@ -39,7 +42,7 @@ func NormalizeUrl(url string, baseDir string) string {
 	return "file://" + filepath.Join(baseDir, url)
 }
 
-func ContainSlice(s []string, val string) bool {
+func IsContained(s []string, val string) bool {
 	for _, v := range s {
 		if val == v {
 			return true
@@ -71,9 +74,19 @@ func LoadYAML(path string, out interface{}) error {
 	return yaml.Unmarshal(data, out)
 }
 
+func ToYAML(m interface{}) (string, error) {
+	b, err := yaml.Marshal(&m)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
+}
+
 func HasIntersection(a, b []string) bool {
 	for _, v := range a {
-		if ContainSlice(b, v) {
+		if IsContained(b, v) {
 			return true
 		}
 	}

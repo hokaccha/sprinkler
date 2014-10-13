@@ -1,6 +1,21 @@
 package main
 
-import "path/filepath"
+import (
+	"path/filepath"
+
+	. "github.com/hokaccha/sprinkler/utils"
+)
+
+type Actions []map[string]interface{}
+
+type Scenario struct {
+	Name    string   `name`
+	Actions Actions  `actions`
+	Include string   `include`
+	Tags    []string `tags`
+}
+
+type Scenarios []Scenario
 
 type Playscript struct {
 	FullPath   string

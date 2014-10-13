@@ -1,0 +1,13 @@
+scenarios:
+- name: Test
+  actions:
+  - visit: assets/assert.html
+  - wait: 1000
+
+  - assert_text:
+      element: .foo
+      equal: foo
+
+  - assert_text:
+      element: .foo
+      contain: "o"

@@ -1,34 +1,30 @@
 - name: Dialog
   tags: [dialog]
   actions:
-  - command: visit
-    url: assets/dialog.html
+  - visit: assets/dialog.html
 
-  - command: click
-    element: .showAlert
+  - click: .showAlert
 
-  - assert: alert_text_equal
-    expect: alert!
+  - assert_dialog_text:
+      equal: alert!
 
-  - command: accept_alert
+  - handle_dialog: accept
 
-  - command: click
-    element: .showConfirm
+  - click: .showConfirm
 
-  - assert: alert_text_contain
-    expect: ok
+  - assert_dialog_text:
+      contain: ok
 
-  - command: accept_alert
+  - handle_dialog: accept
 
-  - assert: text_equal
-    element: .log
-    expect: ok
+  - assert_text:
+      element: .log
+      equal: ok
 
-  - command: click
-    element: .showConfirm
+  - click: .showConfirm
 
-  - command: dismiss_alert
+  - handle_dialog: dismiss
 
-  - assert: text_equal
-    element: .log
-    expect: cancel
+  - assert_text:
+      element: .log
+      equal: cancel

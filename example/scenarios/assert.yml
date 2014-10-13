@@ -1,112 +1,89 @@
 - name: Text Assertion
   tags: [assert]
   actions:
-  - command: visit
-    url: assets/assert.html
+  - visit: assets/assert.html
   
-  - assert: text_equal
-    element: .foo
-    expect: foo
+  - assert_text:
+      element: .foo
+      equal: foo
   
-  - assert: text_contain
-    element: .foo
-    expect: f
+  - assert_text:
+      element: .foo
+      contain: f
 
 - name: Attributes assertion
   tags: [assert]
   actions:
-  - assert: attribute_equal
-    element: div
-    name: data-foo
-    expect: "bar"
+  - assert_attribute:
+      element: div
+      attribute: data-foo
+      equal: "bar"
 
-  - assert: attribute_contain
-    element: div
-    name: data-bar
-    expect: "c"
+  - assert_attribute:
+      element: div
+      attribute: data-bar
+      contain: "c"
 
-  - assert: attribute_equal
-    element: div
-    name: data-baz
-    expect: ""
+  - assert_attribute:
+      element: div
+      attribute: data-baz
+      equal: ""
 
-  - assert: attribute_present
-    element: div
-    name: class
-    expect: foo
+  - assert_attribute:
+      element: div
+      attribute: class
+      present: foo
 
-  - assert: attribute_present
-    element: div
-    name: class
-    expect: baz
-
-  # fail
-  - assert: attribute_present
-    element: div
-    name: class
-    expect: hoge
+  - assert_attribute:
+      element: div
+      attribute: class
+      present: baz
 
 - name: CSS property assertion
   tags: [assert]
   actions:
-  - assert: css_property_equal
-    element: div
-    property: color
-    expect: rgba(255, 0, 0, 1)
+  - assert_css:
+      element: div
+      property: color
+      equal: rgba(255, 0, 0, 1)
 
-  - assert: css_property_equal
-    element: div
-    property: font-size
-    expect: 14px
+  - assert_css:
+      element: div
+      property: font-size
+      equal: 14px
 
 - name: Element assertion
   tags: [assert]
   actions:
-  - assert: element_length_equal
-    element: ul > li
-    expect: 3
+  - assert_length:
+      element: ul > li
+      equal: 3
 
-  - assert: element_exist
-    element: .foo
+  - assert_exist: .foo
 
-  # fail
-  - assert: element_exist
-    element: .notExist
+  - assert_exist:
+      element: .notExist
+      expected: false
 
-  - assert: element_visible
-    element: .show
+  - assert_visible: .show
+  - assert_visible:
+      element: .hide
+      expected: false
 
-  - assert: element_hidden
-    element: .hide
+  - click: .toggleShow
 
-  # fail
-  - assert: element_visible
-    element: .hide
-
-  # fail
-  - assert: element_hidden
-    element: .show
-
-  - command: click
-    element: .toggleShow
-
-  - assert: element_visible
-    element: .hide
-
-  - assert: element_hidden
-    element: .show
+  - assert_visible: .hide
+  - assert_visible: { element: .show, expected: false }
 
 - name: URL Assertion
   tags: [assert]
   actions:
-  - command: visit
-    url: http://example.com/
+  - visit: http://example.com/
 
-  - assert: url_equal
-    expect: http://example.com/
+  - assert_url:
+      equal: http://example.com/
 
-  - command: visit
-    url: assets/assert.html
+  - visit: assets/assert.html
 
-  - assert: url_contain
-    expect: assets/assert.html
+  - assert_url:
+      contain: assets/assert.html

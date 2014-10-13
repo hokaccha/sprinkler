@@ -1,31 +1,16 @@
 - name: Google search
   tags: [google]
   actions:
-    - command: visit
-      url: http://www.google.com
-
-    - command: wait
-      interval: 1000
-
-    - assert: title_equal
-      expect: Google
-
-    - command: wait
-      interval: 1000
-
-    - command: input
-      value: hoge
-      element: input[type="text"]
-
-    - command: wait
-      interval: 1000
-
-    - command: click
-      element: button[name="btnG"]
-
-    - command: wait
-      interval: 1000
-
-    - assert: text_contain
-      element: "#main"
-      expect: hoge
+    - visit: http://www.google.com
+    - wait: 1000
+    - assert_title: { equal: Google }
+    - wait: 1000
+    - input:
+        element: input[type="text"]
+        value: hoge
+    - wait: 1000
+    - click: button[name="btnG"]
+    - wait: 1000
+    - assert_text:
+        element: "#main"
+        contain: hoge

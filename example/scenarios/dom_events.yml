@@ -1,42 +1,38 @@
 - name: Dom Events
   tags: [dom_events]
   actions:
-  - command: visit
-    url: assets/dom_events.html
+  - visit: assets/dom_events.html
 
-  - assert: text_equal
-    element: .log
-    expect: ""
+  - assert_text:
+      element: .log
+      equal: ""
 
-  - command: click
-    element: .clickBtn
+  - click: .clickBtn
 
-  - assert: text_equal
-    element: .log
-    expect: clicked!
+  - assert_text:
+      element: .log
+      equal: clicked!
 
-  - command: input
-    element: input[name="test"]
-    value: input value
+  - input:
+      element: input[name="test"]
+      value: input value
 
-  - assert: value_equal
-    element: input[name="test"]
-    expect: input value
+  - assert_value:
+      element: input[name="test"]
+      equal: input value
 
-  - assert: value_contain
-    element: input[name="test"]
-    expect: input
+  - assert_value:
+      element: input[name="test"]
+      contain: input
 
-  - command: submit
-    element: .form
+  - submit: .form
 
-  - assert: text_equal
-    element: .log
-    expect: input value
+  - assert_text:
+      element: .log
+      equal: input value
 
-  - command: clear
-    element: input[name="test"]
+  - clear: input[name="test"]
 
-  - assert: value_equal
-    element: input[name="test"]
-    expect: ""
+  - assert_value:
+      element: input[name="test"]
+      equal: ""

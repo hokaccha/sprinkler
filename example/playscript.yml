@@ -1,20 +1,16 @@
 browsers: ["chrome"]
 
 before:
-- command: exec_sh
-  script: echo "before!"
+- exec_sh: echo "before!"
 
 after:
-- command: exec_sh
-  script: echo "after!"
+- exec_sh: echo "after!"
 
 before_each:
-- command: exec_sh
-  script: echo "before each!"
+- exec_sh: echo "before each!"
 
 after_each:
-- command: exec_sh
-  script: echo "after each!"
+- exec_sh: echo "after each!"
 
 scenarios:
 - include: scenarios/assert.yml
