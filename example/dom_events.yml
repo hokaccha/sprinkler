@@ -1,5 +1,5 @@
+scenarios:
 - name: Dom Events
-  tags: [dom_events]
   actions:
   - visit: assets/dom_events.html
 

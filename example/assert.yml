@@ -1,5 +1,5 @@
+scenarios:
 - name: Text Assertion
-  tags: [assert]
   actions:
   - visit: assets/assert.html
   
@@ -12,7 +12,6 @@
       contain: f
 
 - name: Attributes assertion
-  tags: [assert]
   actions:
   - assert_attribute:
       element: div
@@ -40,7 +39,6 @@
       present: baz
 
 - name: CSS property assertion
-  tags: [assert]
   actions:
   - assert_css:
       element: div
@@ -53,7 +51,6 @@
       equal: 14px
 
 - name: Element assertion
-  tags: [assert]
   actions:
   - assert_length:
       element: ul > li
@@ -76,7 +73,6 @@
   - assert_visible: { element: .show, expected: false }
 
 - name: URL Assertion
-  tags: [assert]
   actions:
   - visit: http://example.com/
 

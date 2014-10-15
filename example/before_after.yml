@@ -1,0 +1,20 @@
+before:
+- exec_sh: echo "before was run"
+
+after:
+- exec_sh: echo "after was run"
+
+before_each:
+- exec_sh: echo "before_each was run"
+
+after_each:
+- exec_sh: echo "after_each was run"
+
+scenarios:
+- name: s1
+  actions:
+  - exec_sh: echo "s1 was run"
+
+- name: s2
+  actions:
+  - exec_sh: echo "s1 was run"

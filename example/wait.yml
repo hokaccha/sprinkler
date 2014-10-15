@@ -1,5 +1,4 @@
 - name: Wait
-  tags: [wait]
   actions:
   - visit: assets/wait.html
 

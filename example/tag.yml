@@ -1,0 +1,19 @@
+scenarios:
+- name: s1
+  actions:
+  - exec_sh: echo "s1 was run"
+
+- name: s2
+  tags: foo
+  actions:
+  - exec_sh: echo "s2 was run"
+
+- name: s3
+  tags: bar
+  actions:
+  - exec_sh: echo "s3 was run"
+
+- name: s4
+  tags: [foo, bar]
+  actions:
+  - exec_sh: echo "s3 was run"

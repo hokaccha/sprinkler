@@ -1,5 +1,5 @@
+scenarios:
 - name: Execute script
-  tags: [exec_script]
   actions:
   - visit: assets/exec_script.html
   - exec_script: console.log('hoge')

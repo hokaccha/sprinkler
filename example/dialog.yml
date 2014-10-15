@@ -1,5 +1,5 @@
+scenarios:
 - name: Dialog
-  tags: [dialog]
   actions:
   - visit: assets/dialog.html
 

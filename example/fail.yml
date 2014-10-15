@@ -1,13 +1,12 @@
 scenarios:
-- name: Test
+- name: Fail Assertion
   actions:
   - visit: assets/assert.html
-  - wait: 1000
-
+  
   - assert_text:
       element: .foo
-      equal: foo
-
+      equal: bar
+  
   - assert_text:
       element: .foo
-      contain: "o"
+      contain: a

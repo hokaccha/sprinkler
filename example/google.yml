@@ -1,5 +1,5 @@
+scenarios:
 - name: Google search
-  tags: [google]
   actions:
     - visit: http://www.google.com
     - wait: 1000

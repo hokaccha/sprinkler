@@ -1,0 +1,6 @@
+scenarios:
+- include: include/1.yml
+- include: include/2.yml
+- name: s4
+  actions:
+  - exec_sh: echo s4 was run

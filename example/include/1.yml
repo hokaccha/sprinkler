@@ -1,0 +1,7 @@
+- name: s1
+  actions:
+  - exec_sh: echo included s1 was run
+
+- name: s2
+  actions:
+  - exec_sh: echo included s2 was run
