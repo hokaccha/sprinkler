@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"strings"
 
@@ -9,7 +8,7 @@ import (
 )
 
 const helpTemplate = `
-Usage: sprinkler scenario.yml
+Usage: sprinkler [options] playscript.yml...
 
 Options:
 {{range .Flags}}  {{.}}
@@ -40,12 +39,6 @@ func doMain(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	playscript, err := NewPlayscript(args[0])
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	opts := &PlayerOpts{
 		Browser:   c.String("browser"),
 		RemoteUrl: c.String("remote"),
@@ -53,7 +46,7 @@ func doMain(c *cli.Context) {
 		SkipTags:  splitString(c.String("skip-tags")),
 	}
 
-	statusCode := NewPlayer(playscript, opts).Play()
+	statusCode := NewPlayer(opts).Run(args)
 
 	os.Exit(statusCode)
 }

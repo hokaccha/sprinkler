@@ -20,21 +20,69 @@ type PlayerOpts struct {
 
 type Player struct {
 	Wd           selenium.WebDriver
-	Playscript   *Playscript
+	PlayScript   *PlayScript
 	SuccessCount int
 	FailCount    int
 	Opts         *PlayerOpts
 }
 
-func NewPlayer(playscript *Playscript, opts *PlayerOpts) *Player {
+func NewPlayer(opts *PlayerOpts) *Player {
 	return &Player{
-		Playscript: playscript,
-		Opts:       opts,
+		Opts: opts,
 	}
 }
 
-func (player *Player) Play() (statusCode int) {
-	caps := selenium.Capabilities(map[string]interface{}{"browserName": player.Opts.Browser})
+type Actions []map[string]interface{}
+
+type Scenario struct {
+	Name    string      `name`
+	Actions Actions     `actions`
+	Include string      `include`
+	Tags    interface{} `tags`
+}
+
+type Scenarios []Scenario
+
+type PlayScript struct {
+	OrigPath   string
+	FullPath   string
+	BaseName   string
+	BaseDir    string
+	Scenarios  Scenarios `scenarios`
+	Before     Actions   `before`
+	After      Actions   `after`
+	BeforeEach Actions   `before_each`
+	AfterEach  Actions   `after_each`
+}
+
+func NewPlayScript(inputFilePath string) (*PlayScript, error) {
+	fullPath, err := filepath.Abs(inputFilePath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	playscript := &PlayScript{}
+
+	playscript.OrigPath = inputFilePath
+	playscript.FullPath = fullPath
+	playscript.BaseDir = filepath.Dir(fullPath)
+	playscript.BaseName = filepath.Base(fullPath)
+
+	err = utils.LoadYAML(fullPath, &playscript)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return playscript, nil
+}
+
+func (player *Player) Run(filePaths []string) (statusCode int) {
+	caps := selenium.Capabilities(map[string]interface{}{
+		"browserName": player.Opts.Browser,
+	})
+
 	wd, err := selenium.NewRemote(caps, player.Opts.RemoteUrl)
 
 	if err != nil {
@@ -44,22 +92,13 @@ func (player *Player) Play() (statusCode int) {
 	player.Wd = wd
 	defer wd.Quit()
 
-	err = player.PlayActions(player.Playscript.Before)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return 1
-	}
+	for _, filePath := range filePaths {
+		err = player.Play(filePath)
 
-	err = player.PlayScenarios(player.Playscript.Scenarios)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return 1
-	}
-
-	err = player.PlayActions(player.Playscript.After)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return 1
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			return 1
+		}
 	}
 
 	if player.FailCount == 0 {
@@ -74,8 +113,37 @@ func (player *Player) Play() (statusCode int) {
 	return statusCode
 }
 
+func (player *Player) Play(filePath string) error {
+	playscript, err := NewPlayScript(filePath)
+
+	if err != nil {
+		return fmt.Errorf("%s: %s", err.Error(), filePath)
+	}
+
+	utils.Debug("Run playscript: %s", playscript.FullPath)
+
+	player.PlayScript = playscript
+
+	err = player.PlayActions(player.PlayScript.Before)
+	if err != nil {
+		return err
+	}
+
+	err = player.PlayScenarios(player.PlayScript.Scenarios)
+	if err != nil {
+		return err
+	}
+
+	err = player.PlayActions(player.PlayScript.After)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (player *Player) LoadInclude(path string, scenarios *Scenarios) error {
-	fullPath := filepath.Join(player.Playscript.BaseDir, path)
+	fullPath := filepath.Join(player.PlayScript.BaseDir, path)
 	return utils.LoadYAML(fullPath, scenarios)
 }
 
@@ -119,7 +187,7 @@ func (player *Player) PlayScenario(scenario Scenario) error {
 
 	fmt.Printf("\n## %s\n\n", scenario.Name)
 
-	err := player.PlayActions(player.Playscript.BeforeEach)
+	err := player.PlayActions(player.PlayScript.BeforeEach)
 	if err != nil {
 		return err
 	}
@@ -129,7 +197,7 @@ func (player *Player) PlayScenario(scenario Scenario) error {
 		return err
 	}
 
-	err = player.PlayActions(player.Playscript.AfterEach)
+	err = player.PlayActions(player.PlayScript.AfterEach)
 	if err != nil {
 		return err
 	}
@@ -142,7 +210,7 @@ func (player *Player) PlayActions(actions Actions) error {
 		for name, params := range actionMap {
 			opts := &action.ActionOpts{
 				Wd:      player.Wd,
-				BaseDir: player.Playscript.BaseDir,
+				BaseDir: player.PlayScript.BaseDir,
 				Name:    name,
 				Params:  params,
 			}
@@ -152,10 +220,14 @@ func (player *Player) PlayActions(actions Actions) error {
 				actionYAML, _ := utils.MarshalYAML(actionMap)
 				format := `%s
 
-Faild Action
-------------
+Failed File
+-----------
+%s
+
+Failed Action
+-------------
 %s`
-				return fmt.Errorf(format, utils.Red("[Error] "+err.Error()), actionYAML)
+				return fmt.Errorf(format, utils.Red("[Error] "+err.Error()), player.PlayScript.OrigPath, actionYAML)
 			}
 
 			player.HandleActionResult(result)
