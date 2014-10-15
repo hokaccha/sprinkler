@@ -1,0 +1,5 @@
+scenarios:
+- name: Error scenario
+  tags: error
+  actions:
+  - foo: bar

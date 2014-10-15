@@ -4,12 +4,11 @@ scenarios:
     - visit: http://www.google.com
     - wait: 1000
     - assert_title: { equal: Google }
-    - wait: 1000
+    - wait_for: input[type="text"]
     - input:
         element: input[type="text"]
         value: hoge
-    - wait: 1000
-    - click: button[name="btnG"]
+    - submit: form[name="f"]
     - wait: 1000
     - assert_text:
         element: "#main"

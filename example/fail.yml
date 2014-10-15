@@ -1,8 +1,9 @@
 scenarios:
 - name: Fail Assertion
+  tags: fail
   actions:
   - visit: assets/assert.html
-  
+
   - assert_text:
       element: .foo
       equal: bar

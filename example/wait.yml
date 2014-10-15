@@ -1,3 +1,4 @@
+scenarios:
 - name: Wait
   actions:
   - visit: assets/wait.html
