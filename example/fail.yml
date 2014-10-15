@@ -1,6 +1,8 @@
 scenarios:
 - name: Fail Assertion
-  tags: fail
+  tags:
+    - fail
+    - notest
   actions:
   - visit: assets/assert.html
 

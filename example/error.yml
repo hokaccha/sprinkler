@@ -1,5 +1,5 @@
 scenarios:
 - name: Error scenario
-  tags: error
+  tags: [error, notest]
   actions:
   - foo: bar
