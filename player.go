@@ -12,8 +12,10 @@ import (
 )
 
 type PlayerOpts struct {
-	Tags     []string
-	SkipTags []string
+	Tags      []string
+	SkipTags  []string
+	Browser   string
+	RemoteUrl string
 }
 
 type Player struct {
@@ -32,9 +34,8 @@ func NewPlayer(playscript *Playscript, opts *PlayerOpts) *Player {
 }
 
 func (player *Player) Play() (statusCode int) {
-	caps := selenium.Capabilities(map[string]interface{}{"browserName": "chrome"})
-	url := "http://localhost:4444/wd/hub"
-	wd, err := selenium.NewRemote(caps, url)
+	caps := selenium.Capabilities(map[string]interface{}{"browserName": player.Opts.Browser})
+	wd, err := selenium.NewRemote(caps, player.Opts.RemoteUrl)
 
 	if err != nil {
 		log.Fatal(err)

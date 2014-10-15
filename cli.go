@@ -12,11 +12,8 @@ const helpTemplate = `
 Usage: sprinkler scenario.yml
 
 Options:
-  --tags=TAGS, -t TAGS  only run scenarios tagged with these values
-  --skip-tags=TAGS      only run scenarios whose tags do not match these values
-  --version, -v         print the version
-  --help, -h            show help
-`
+{{range .Flags}}  {{.}}
+{{end}}`
 
 func NewCliApp() *cli.App {
 	cli.AppHelpTemplate = helpTemplate[1:]
@@ -24,6 +21,8 @@ func NewCliApp() *cli.App {
 	app.Name = "sprinkler"
 	app.HideHelp = true
 	app.Flags = []cli.Flag{
+		browserFlag,
+		remoteFlag,
 		tagFlag,
 		skipTagFlag,
 		cli.HelpFlag,
@@ -48,13 +47,27 @@ func action(c *cli.Context) {
 	}
 
 	opts := &PlayerOpts{
-		Tags:     splitString(c.String("tags")),
-		SkipTags: splitString(c.String("skip-tags")),
+		Browser:   c.String("browser"),
+		RemoteUrl: c.String("remote"),
+		Tags:      splitString(c.String("tags")),
+		SkipTags:  splitString(c.String("skip-tags")),
 	}
 
 	statusCode := NewPlayer(playscript, opts).Play()
 
 	os.Exit(statusCode)
+}
+
+var browserFlag = cli.StringFlag{
+	Name:  "browser, b",
+	Value: "firefox",
+	Usage: "browser name",
+}
+
+var remoteFlag = cli.StringFlag{
+	Name:  "remote, r",
+	Value: "http://localhost:4444/wd/hub",
+	Usage: "RemoteWebDriver server URL",
 }
 
 var tagFlag = cli.StringFlag{

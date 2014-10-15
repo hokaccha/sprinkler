@@ -1,5 +1,3 @@
-browsers: ["chrome"]
-
 before:
 - exec_sh: echo "before!"
 
