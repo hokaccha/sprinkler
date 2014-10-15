@@ -57,3 +57,34 @@ func TestHasIntersection(t *testing.T) {
 	test([]string{"foo", "bar"}, []string{"bar"}, true)
 	test([]string{"foo"}, []string{"foo", "bar"}, true)
 }
+
+func TestStringSlice(t *testing.T) {
+	var in interface{}
+
+	test := func(input interface{}, expected []string) {
+		m := "StringSlice(%#v) should be %#v"
+		res := StringSlice(in)
+
+		if len(res) != len(expected) {
+			t.Errorf(m, in, expected)
+		}
+
+		for k, v := range StringSlice(in) {
+			if expected[k] != v {
+				t.Errorf(m, in, expected)
+			}
+		}
+	}
+
+	in = "foo"
+	test(in, []string{"foo"})
+
+	in = []string{"foo", "bar"}
+	test(in, []string{"foo", "bar"})
+
+	in = []interface{}{"foo", "bar"}
+	test(in, []string{"foo", "bar"})
+
+	in = nil
+	test(in, nil)
+}

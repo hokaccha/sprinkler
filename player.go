@@ -108,11 +108,13 @@ func (player *Player) PlayScenarios(scenarios Scenarios) error {
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
-	if len(player.Opts.Tags) > 0 && !HasIntersection(scenario.Tags, player.Opts.Tags) {
+	tags := StringSlice(scenario.Tags)
+
+	if len(player.Opts.Tags) > 0 && !HasIntersection(tags, player.Opts.Tags) {
 		return nil
 	}
 
-	if HasIntersection(scenario.Tags, player.Opts.SkipTags) {
+	if HasIntersection(tags, player.Opts.SkipTags) {
 		return nil
 	}
 

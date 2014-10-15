@@ -93,3 +93,24 @@ func HasIntersection(a, b []string) bool {
 
 	return false
 }
+
+func StringSlice(in interface{}) []string {
+	switch in.(type) {
+	case string:
+		return []string{in.(string)}
+	case []string:
+		return in.([]string)
+	case []interface{}:
+		ret := []string{}
+		for _, v := range in.([]interface{}) {
+			ret = append(ret, v.(string))
+		}
+		return ret
+	case nil:
+		return nil
+	default:
+		panic("invalid arguments")
+	}
+
+	return nil
+}

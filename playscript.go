@@ -9,10 +9,10 @@ import (
 type Actions []map[string]interface{}
 
 type Scenario struct {
-	Name    string   `name`
-	Actions Actions  `actions`
-	Include string   `include`
-	Tags    []string `tags`
+	Name    string      `name`
+	Actions Actions     `actions`
+	Include string      `include`
+	Tags    interface{} `tags`
 }
 
 type Scenarios []Scenario
