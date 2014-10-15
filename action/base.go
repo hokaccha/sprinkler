@@ -5,12 +5,12 @@ import (
 	"reflect"
 	"strings"
 
-	. "github.com/hokaccha/sprinkler/utils"
+	"github.com/hokaccha/sprinkler/utils"
 	"github.com/sourcegraph/go-selenium"
 )
 
 func actionLog(name string, message string, args ...interface{}) {
-	Debug("Run action "+name+" - "+message, args...)
+	utils.Debug("Run action "+name+" - "+message, args...)
 }
 
 type ActionRunner interface {
@@ -205,7 +205,7 @@ func (a *ActionBase) assertContain(subject, actual, expected string) {
 
 func (a *ActionBase) assertPresent(subject, actual, expected string) {
 	message := fmt.Sprintf("%s has '%s'", subject, expected)
-	ok := IsContained(strings.Fields(actual), expected)
+	ok := utils.IsContained(strings.Fields(actual), expected)
 
 	if !ok {
 		message = errMsg(message, actual)
@@ -219,12 +219,12 @@ func (a *ActionBase) assert(ok bool, message string) {
 
 	if ok {
 		a.Result.Successed = true
-		a.Result.Message = fmt.Sprintf("%s - %s", Green("OK"), message)
+		a.Result.Message = fmt.Sprintf("%s - %s", utils.Green("OK"), message)
 	} else {
-		a.Result.Message = fmt.Sprintf("%s - %s", Red("NG"), message)
+		a.Result.Message = fmt.Sprintf("%s - %s", utils.Red("NG"), message)
 	}
 }
 
 func errMsg(message, actual string) string {
-	return fmt.Sprintf("%s - %s: %s", message, Yellow("Actual"), actual)
+	return fmt.Sprintf("%s - %s: %s", message, utils.Yellow("Actual"), actual)
 }

@@ -74,7 +74,7 @@ func LoadYAML(path string, out interface{}) error {
 	return yaml.Unmarshal(data, out)
 }
 
-func ToYAML(m interface{}) (string, error) {
+func MarshalYAML(m interface{}) (string, error) {
 	b, err := yaml.Marshal(&m)
 
 	if err != nil {

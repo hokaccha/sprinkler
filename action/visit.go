@@ -3,7 +3,7 @@ package action
 import (
 	"fmt"
 
-	. "github.com/hokaccha/sprinkler/utils"
+	"github.com/hokaccha/sprinkler/utils"
 )
 
 func init() {
@@ -30,7 +30,7 @@ func (a *VisitAction) Run(params interface{}) error {
 		return fmt.Errorf("url is not defined")
 	}
 
-	url := NormalizeUrl(p.Url, a.BaseDir)
+	url := utils.NormalizeUrl(p.Url, a.BaseDir)
 
 	actionLog("visit", "url=%s", url)
 

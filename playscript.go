@@ -3,7 +3,7 @@ package main
 import (
 	"path/filepath"
 
-	. "github.com/hokaccha/sprinkler/utils"
+	"github.com/hokaccha/sprinkler/utils"
 )
 
 type Actions []map[string]interface{}
@@ -41,7 +41,7 @@ func NewPlayscript(inputFilePath string) (*Playscript, error) {
 	playscript.BaseDir = filepath.Dir(fullPath)
 	playscript.BaseName = filepath.Base(fullPath)
 
-	err = LoadYAML(fullPath, &playscript)
+	err = utils.LoadYAML(fullPath, &playscript)
 
 	if err != nil {
 		return nil, err

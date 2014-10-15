@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	. "github.com/hokaccha/sprinkler/action"
-	. "github.com/hokaccha/sprinkler/utils"
+	"github.com/hokaccha/sprinkler/action"
+	"github.com/hokaccha/sprinkler/utils"
 	"github.com/sourcegraph/go-selenium"
 )
 
@@ -62,12 +62,11 @@ func (player *Player) Play() (statusCode int) {
 		return 1
 	}
 
-	fmt.Print("\n")
 	if player.FailCount == 0 {
-		fmt.Println("Result: \033[32mSUCCESS\033[0m")
+		fmt.Printf("\nResult: %s\n", utils.Green("SUCCESS"))
 	} else {
 		statusCode = 1
-		fmt.Println("Result: \033[31mFAIL\033[0m")
+		fmt.Printf("\nResult: %s\n", utils.Red("FAIL"))
 	}
 
 	fmt.Printf("Success: %d  Fail: %d\n", player.SuccessCount, player.FailCount)
@@ -77,7 +76,7 @@ func (player *Player) Play() (statusCode int) {
 
 func (player *Player) LoadInclude(path string, scenarios *Scenarios) error {
 	fullPath := filepath.Join(player.Playscript.BaseDir, path)
-	return LoadYAML(fullPath, scenarios)
+	return utils.LoadYAML(fullPath, scenarios)
 }
 
 func (player *Player) PlayScenarios(scenarios Scenarios) error {
@@ -108,13 +107,13 @@ func (player *Player) PlayScenarios(scenarios Scenarios) error {
 }
 
 func (player *Player) PlayScenario(scenario Scenario) error {
-	tags := StringSlice(scenario.Tags)
+	tags := utils.StringSlice(scenario.Tags)
 
-	if len(player.Opts.Tags) > 0 && !HasIntersection(tags, player.Opts.Tags) {
+	if len(player.Opts.Tags) > 0 && !utils.HasIntersection(tags, player.Opts.Tags) {
 		return nil
 	}
 
-	if HasIntersection(tags, player.Opts.SkipTags) {
+	if utils.HasIntersection(tags, player.Opts.SkipTags) {
 		return nil
 	}
 
@@ -141,17 +140,22 @@ func (player *Player) PlayScenario(scenario Scenario) error {
 func (player *Player) PlayActions(actions Actions) error {
 	for _, actionMap := range actions {
 		for name, params := range actionMap {
-			opts := &ActionOpts{
+			opts := &action.ActionOpts{
 				Wd:      player.Wd,
 				BaseDir: player.Playscript.BaseDir,
 				Name:    name,
 				Params:  params,
 			}
-			result, err := RunAction(opts)
+			result, err := action.RunAction(opts)
 
 			if err != nil {
-				actionYAML, _ := ToYAML(actionMap)
-				return fmt.Errorf("%s\n%s", Red("[Error] "+err.Error()), actionYAML)
+				actionYAML, _ := utils.MarshalYAML(actionMap)
+				format := `%s
+
+Faild Action
+------------
+%s`
+				return fmt.Errorf(format, utils.Red("[Error] "+err.Error()), actionYAML)
 			}
 
 			player.HandleActionResult(result)
@@ -161,7 +165,7 @@ func (player *Player) PlayActions(actions Actions) error {
 	return nil
 }
 
-func (player *Player) HandleActionResult(result *ActionResult) {
+func (player *Player) HandleActionResult(result *action.ActionResult) {
 	if result == nil || result.IsAssert == false {
 		return
 	}

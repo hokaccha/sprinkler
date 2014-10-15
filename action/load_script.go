@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	. "github.com/hokaccha/sprinkler/utils"
+	"github.com/hokaccha/sprinkler/utils"
 )
 
 func init() {
@@ -33,7 +33,7 @@ func (a *LoadScriptAction) Run(params interface{}) error {
 
 	actionLog("load_script", "src=%s", p.Src)
 	srcPath := filepath.Join(a.BaseDir, p.Src)
-	data, err := ReadFile(srcPath)
+	data, err := utils.ReadFile(srcPath)
 
 	if err != nil {
 		return err

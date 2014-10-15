@@ -27,12 +27,12 @@ func NewCliApp() *cli.App {
 		skipTagFlag,
 		cli.HelpFlag,
 	}
-	app.Action = action
+	app.Action = doMain
 
 	return app
 }
 
-func action(c *cli.Context) {
+func doMain(c *cli.Context) {
 	args := c.Args()
 
 	if len(args) == 0 {
