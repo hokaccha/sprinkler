@@ -44,7 +44,7 @@ func RunAction(opts *ActionOpts) (*ActionResult, error) {
 	runnerFn, ok := actionMap[opts.Name]
 
 	if !ok {
-		return nil, fmt.Errorf("invalid action: %s", opts.Name)
+		return nil, fmt.Errorf("unknown action: %s", opts.Name)
 	}
 
 	runner := runnerFn()
