@@ -19,6 +19,7 @@ func NewCliApp() *cli.App {
 	app := cli.NewApp()
 	app.Name = "sprinkler"
 	app.HideHelp = true
+	app.Version = Version
 	app.Flags = []cli.Flag{
 		browserFlag,
 		remoteFlag,
