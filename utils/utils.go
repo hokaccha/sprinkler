@@ -14,7 +14,6 @@ import (
 var Debug = debug.Debug("sprinkler")
 
 var reHttpProto = regexp.MustCompile("^https?://")
-var reAbsFilePath = regexp.MustCompile("^/")
 
 func ToCamelCase(word string) string {
 	chunks := strings.Split(word, "_")
@@ -35,11 +34,19 @@ func NormalizeUrl(url string, baseDir string) string {
 		return url
 	}
 
-	if reAbsFilePath.MatchString(url) {
+	if filepath.IsAbs(url) {
 		return "file://" + url
 	}
 
 	return "file://" + filepath.Join(baseDir, url)
+}
+
+func AbsPath(path, cwd string) string {
+	if filepath.IsAbs(path) {
+		return path
+	} else {
+		return filepath.Join(cwd, path)
+	}
 }
 
 func IsContained(s []string, val string) bool {

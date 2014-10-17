@@ -32,6 +32,18 @@ func TestNormalizeUrl(t *testing.T) {
 	test("../foo/bar", "/path/to/dir", "file:///path/to/foo/bar")
 }
 
+func TestAbsPath(t *testing.T) {
+	test := func(path string, baseDir string, output string) {
+		if AbsPath(path, baseDir) != output {
+			t.Errorf("AbsPath(\"%s\", \"%s\") is not %s: %s", path, baseDir, output, AbsPath(path, baseDir))
+		}
+	}
+
+	test("/foo/bar", "/path/to/dir", "/foo/bar")
+	test("foo/bar", "/path/to/dir", "/path/to/dir/foo/bar")
+	test("../foo/bar", "/path/to/dir", "/path/to/foo/bar")
+}
+
 func TestContainSlice(t *testing.T) {
 	if IsContained([]string{"foo", "bar", "baz"}, "baz") == false {
 		t.Errorf("ContainSlice should return true")

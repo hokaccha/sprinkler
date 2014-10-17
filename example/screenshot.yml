@@ -1,0 +1,5 @@
+scenarios:
+- name: Take Screenshot
+  actions:
+  - visit: assets/screenshot.html
+  - screenshot: assets/screenshot.png
