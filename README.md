@@ -3,13 +3,6 @@ sprinkler
 
 End To End Testing framework.
 
-Installation
---------------
-
-```
-$ go get github.com/hokaccha/sprinkler
-```
-
 Get started
 --------------
 
