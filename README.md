@@ -6,6 +6,19 @@ End To End Testing framework.
 Get started
 --------------
 
+### Install sprinkler
+
+OSX:
+
+```
+$ brew tap hokaccha/sprinkler
+$ brew install sprinkler
+```
+
+or:
+
+Dowonload from [releases](https://github.com/hokaccha/sprinkler/releases)
+
 ### Setup selenium
 
 OSX:
