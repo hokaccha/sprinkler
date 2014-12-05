@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>stroage test page</title>
+</head>
+<body>
+<button class="btn1">btn1</button>
+<button class="btn2">btn2</button>
+<script src="./jquery-2.1.1.js"></script>
+<script>
+$('.btn1').click(function() {
+  setTimeout(function() {
+    localStorage.setItem('l-key2', JSON.stringify({ a: 'b' }));
+  }, 300);
+});
+$('.btn2').click(function() {
+  setTimeout(function() {
+    sessionStorage.setItem('s-key2', JSON.stringify({ c: 'd' }));
+  }, 300);
+});
+</script>
+</body>
+</html>
