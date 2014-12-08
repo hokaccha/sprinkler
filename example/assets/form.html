@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Sample</title>
+</head>
+<body>
+
+<form class="exampleForm">
+
+  <h3>select</h3>
+
+  <select name="s">
+    <option value="s1">1</option>
+    <option value="s2">2</option>
+    <option value="s3">3</option>
+  </select>
+
+  <h3>radio</h3>
+
+  <div>1<input type="radio" name="r" value="r1"></div>
+  <div>2<input type="radio" name="r" value="r2"></div>
+  <div>3<input type="radio" name="r" value="r3"></div>
+
+  <h3>checkbox</h3>
+
+  <div>1<input type="checkbox" name="c" value="c1"></div>
+  <div>2<input type="checkbox" name="c" value="c2"></div>
+  <div>3<input type="checkbox" name="c" value="c3"></div>
+
+  <input type="submit">
+</form>
+
+<div class="log">
+</div>
+
+<script src="./jquery-2.1.1.js"></script>
+<script>
+$('.exampleForm').submit(function(e) {
+  e.preventDefault();
+
+  var val = $('[name="c"]:checked').map(function() {
+    return $(this).val()
+  });
+
+  $('.log').text([
+    $('[name=s]').val(),
+    $('[name="r"]:checked').val(),
+    $('[name="c"]:checked').map(function() { return $(this).val() }).toArray().join(':')
+  ].join(':'));
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+scenarios:
+- name: select form elements
+  actions:
+  - visit: assets/form.html
+  - click: '[name="s"] option[value="s2"]'
+  - click: '[name="r"][value="r2"]'
+  - click: '[name="c"][value="c2"]'
+  - click: '[name="c"][value="c3"]'
+  - submit: .exampleForm
+  - assert_text:
+      element: .log
+      equal: s2:r2:c2:c3
