@@ -14,6 +14,7 @@ func init() {
 type AssertLengthParams struct {
 	Element string `name:"element"`
 	Equal   *int   `name:"equal"`
+	Timeout int    `name:"timeout"`
 }
 
 type AssertLengthAction struct {
@@ -28,18 +29,23 @@ func (a *AssertLengthAction) Run(params interface{}) error {
 		return err
 	}
 
-	els, err := a.findElements(p.Element)
-
-	if err != nil {
-		return err
+	if p.Equal == nil {
+		return fmt.Errorf(`invalid parameters: "equal" is required`)
 	}
 
-	subject := fmt.Sprintf("%s length", p.Element)
+	return a.assertUntil(p.Timeout, func() error {
+		els, err := a.findElements(p.Element)
 
-	if p.Equal != nil {
-		a.assertEqual(subject, strconv.Itoa(len(els)), strconv.Itoa(*p.Equal))
+		if err != nil {
+			return err
+		}
+
+		subject := fmt.Sprintf("%s length", p.Element)
+
+		if p.Equal != nil {
+			a.assertEqual(subject, strconv.Itoa(len(els)), strconv.Itoa(*p.Equal))
+		}
+
 		return nil
-	}
-
-	return fmt.Errorf("invalid parameters: \"equal\" is required")
+	})
 }

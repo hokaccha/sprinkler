@@ -9,7 +9,8 @@ func init() {
 }
 
 type AssertNotSelectedParams struct {
-	Element  string `name:"element"`
+	Element string `name:"element"`
+	Timeout int    `name:"timeout"`
 }
 
 type AssertNotSelectedAction struct {
@@ -24,20 +25,21 @@ func (a *AssertNotSelectedAction) Run(params interface{}) error {
 		return err
 	}
 
-	el, err := a.findElement(p.Element)
+	return a.assertUntil(p.Timeout, func() error {
+		el, err := a.findElement(p.Element)
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	selected, err := el.IsSelected()
+		selected, err := el.IsSelected()
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	a.assert(!selected, fmt.Sprintf("%s is not selected", p.Element))
+		a.assert(!selected, fmt.Sprintf("%s is not selected", p.Element))
 
-	return nil
+		return nil
+	})
 }
-

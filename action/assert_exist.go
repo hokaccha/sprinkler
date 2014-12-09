@@ -9,7 +9,8 @@ func init() {
 }
 
 type AssertExistParams struct {
-	Element  string `name:"element"`
+	Element string `name:"element"`
+	Timeout int    `name:"timeout"`
 }
 
 type AssertExistAction struct {
@@ -24,11 +25,13 @@ func (a *AssertExistAction) Run(params interface{}) error {
 		return err
 	}
 
-	// TODO: Check status code
-	_, err = a.findElement(p.Element)
-	ok := err == nil
+	return a.assertUntil(p.Timeout, func() error {
+		// TODO: Check status code
+		_, err = a.findElement(p.Element)
+		ok := err == nil
 
-	a.assert(ok, fmt.Sprintf("%s exists", p.Element))
+		a.assert(ok, fmt.Sprintf("%s exists", p.Element))
 
-	return nil
+		return nil
+	})
 }

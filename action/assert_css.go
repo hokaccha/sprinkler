@@ -12,6 +12,7 @@ type AssertCssParams struct {
 	Element  string  `name:"element"`
 	Property string  `name:"property"`
 	Equal    *string `name:"equal"`
+	Timeout  int     `name:"timeout"`
 }
 
 type AssertCssAction struct {
@@ -26,24 +27,29 @@ func (a *AssertCssAction) Run(params interface{}) error {
 		return err
 	}
 
-	el, err := a.findElement(p.Element)
-
-	if err != nil {
-		return err
+	if p.Equal == nil {
+		return fmt.Errorf(`invalid parameters: "equal" is required`)
 	}
 
-	value, err := el.CSSProperty(p.Property)
+	return a.assertUntil(p.Timeout, func() error {
+		el, err := a.findElement(p.Element)
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	subject := fmt.Sprintf("%s %s", p.Element, p.Property)
+		value, err := el.CSSProperty(p.Property)
 
-	if p.Equal != nil {
-		a.assertEqual(subject, value, *p.Equal)
+		if err != nil {
+			return err
+		}
+
+		subject := fmt.Sprintf("%s %s", p.Element, p.Property)
+
+		if p.Equal != nil {
+			a.assertEqual(subject, value, *p.Equal)
+		}
+
 		return nil
-	}
-
-	return fmt.Errorf("invalid parameters: \"equal\" is required")
+	})
 }

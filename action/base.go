@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/hokaccha/sprinkler/utils"
 	"github.com/sourcegraph/go-selenium"
@@ -108,7 +109,6 @@ func (a *ActionBase) parseParams(data interface{}, v interface{}) error {
 			if err != nil {
 				return err
 			}
-
 		}
 	default:
 		structField := vt.Field(0)
@@ -179,6 +179,33 @@ func (a *ActionBase) getAttribute(selector, name string) (string, error) {
 	}
 
 	return value, nil
+}
+
+func (a *ActionBase) assertUntil(timeout int, fn func() error) error {
+	// TODO: Use goroutine
+	interval := 200
+	duration := time.Duration(interval) * time.Millisecond
+	totalTime := 0
+
+	wait := func() {
+		totalTime += interval
+		time.Sleep(duration)
+	}
+
+	for {
+		err := fn()
+
+		if a.Result.Successed == true {
+			return nil
+		}
+
+		if totalTime < timeout {
+			wait()
+			continue
+		}
+
+		return err
+	}
 }
 
 func (a *ActionBase) assertEqual(subject, actual, expected string) {

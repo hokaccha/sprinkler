@@ -6,11 +6,109 @@
 </head>
 <body>
 
+<button class="b1">1</button>
+<button class="b2">2</button>
+<button class="b3">3</button>
+<button class="b4">4</button>
+<button class="b5">5</button>
+<button class="b6">6</button>
+<button class="b7">7</button>
+<button class="b8">8</button>
+<button class="b9">9</button>
+<button class="b10">10</button>
+<button class="b11">11</button>
+<button class="b12">12</button>
+<button class="b13">13</button>
+<button class="b14">14</button>
+
+<div class="log"></div>
+<div><input type="checkbox" class="c"></div>
+<div><input type="text" class="t"></div>
+
 <script src="./jquery-2.1.1.js"></script>
 <script>
-setTimeout(function() {
-  $('<div>').addClass('el').text('foo').appendTo('body');
-}, 2000);
+var $log = $('.log');
+$('.b1').click(function() {
+  setTimeout(function() {
+    $log.text('b1 clicked');
+  }, 300);
+});
+
+$('.b2').click(function() {
+  setTimeout(function() {
+    $log.attr('data-foo', 'bar')
+  }, 300);
+});
+
+$('.b3').click(function() {
+  setTimeout(function() {
+    $log.css('color', 'rgba(255, 0, 0, 1)')
+  }, 300);
+});
+
+$('.b4').click(function() {
+  setTimeout(function() {
+    alert('foo');
+  }, 300);
+});
+
+$('.b5').click(function() {
+  $log.fadeOut(300);
+});
+
+$('.b6').click(function() {
+  setTimeout(function() {
+    $log.show(300);
+  }, 300);
+});
+
+$('.b7').click(function() {
+  setTimeout(function() {
+    $log.remove();
+  }, 300);
+});
+
+$('.b8').click(function() {
+  setTimeout(function() {
+    $log.appendTo('body');
+  }, 300);
+});
+
+$('.b9').click(function() {
+  setTimeout(function() {
+    $log.clone().appendTo('body');
+  }, 300);
+});
+
+$('.b10').click(function() {
+  setTimeout(function() {
+    $('.c').prop('checked', true);
+  }, 300);
+});
+
+$('.b11').click(function() {
+  setTimeout(function() {
+    $('.c').prop('checked', false);
+  }, 300);
+});
+
+$('.b12').click(function() {
+  setTimeout(function() {
+    document.title = 'foo';
+  }, 300);
+});
+
+$('.b13').click(function() {
+  setTimeout(function() {
+    location.hash = '#foo'
+  }, 300);
+});
+
+$('.b14').click(function() {
+  setTimeout(function() {
+    $('.t').val('text');
+  }, 300);
+});
 </script>
 </body>
 </html>

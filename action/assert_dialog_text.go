@@ -11,6 +11,7 @@ func init() {
 type AssertDialogTextParams struct {
 	Equal   *string `name:"equal"`
 	Contain *string `name:"contain"`
+	Timeout int     `name:"timeout"`
 }
 
 type AssertDialogTextAction struct {
@@ -25,23 +26,27 @@ func (a *AssertDialogTextAction) Run(params interface{}) error {
 		return err
 	}
 
-	text, err := a.Wd.AlertText()
-
-	if err != nil {
-		return err
+	if p.Equal == nil && p.Contain == nil {
+		return fmt.Errorf(`invalid parameters: "equal" or "contain" is required`)
 	}
 
-	subject := fmt.Sprintf("dialog text")
+	return a.assertUntil(p.Timeout, func() error {
+		text, err := a.Wd.AlertText()
 
-	if p.Equal != nil {
-		a.assertEqual(subject, text, *p.Equal)
+		if err != nil {
+			return err
+		}
+
+		subject := fmt.Sprintf("dialog text")
+
+		if p.Equal != nil {
+			a.assertEqual(subject, text, *p.Equal)
+		}
+
+		if p.Contain != nil {
+			a.assertContain(subject, text, *p.Contain)
+		}
+
 		return nil
-	}
-
-	if p.Contain != nil {
-		a.assertContain(subject, text, *p.Contain)
-		return nil
-	}
-
-	return fmt.Errorf("invalid parameters: \"equal\" or \"contain\" is required")
+	})
 }

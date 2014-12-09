@@ -5,7 +5,6 @@ scenarios:
     - visit: http://www.google.com
     - wait: 1000
     - assert_title: { equal: Google }
-    - wait_for: input[type="text"]
     - input:
         element: input[type="text"]
         value: hoge

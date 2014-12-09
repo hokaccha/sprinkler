@@ -13,6 +13,7 @@ type AssertValueParams struct {
 	Value   string  `name:"value"`
 	Equal   *string `name:"equal"`
 	Contain *string `name:"contain"`
+	Timeout int     `name:"timeout"`
 }
 
 type AssertValueAction struct {
@@ -27,23 +28,27 @@ func (a *AssertValueAction) Run(params interface{}) error {
 		return err
 	}
 
-	value, err := a.getAttribute(p.Element, "value")
-
-	if err != nil {
-		return err
+	if p.Equal == nil && p.Contain == nil {
+		return fmt.Errorf(`invalid parameters: "equal" or "contain" is required`)
 	}
 
-	subject := fmt.Sprintf("%s value", p.Element)
+	return a.assertUntil(p.Timeout, func() error {
+		value, err := a.getAttribute(p.Element, "value")
 
-	if p.Equal != nil {
-		a.assertEqual(subject, value, *p.Equal)
+		if err != nil {
+			return err
+		}
+
+		subject := fmt.Sprintf("%s value", p.Element)
+
+		if p.Equal != nil {
+			a.assertEqual(subject, value, *p.Equal)
+		}
+
+		if p.Contain != nil {
+			a.assertContain(subject, value, *p.Contain)
+		}
+
 		return nil
-	}
-
-	if p.Contain != nil {
-		a.assertContain(subject, value, *p.Contain)
-		return nil
-	}
-
-	return fmt.Errorf("invalid parameters: \"equal\" or \"contain\" is required")
+	})
 }

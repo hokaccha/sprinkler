@@ -9,7 +9,8 @@ func init() {
 }
 
 type AssertVisibleParams struct {
-	Element  string `name:"element"`
+	Element string `name:"element"`
+	Timeout int    `name:"timeout"`
 }
 
 type AssertVisibleAction struct {
@@ -24,19 +25,21 @@ func (a *AssertVisibleAction) Run(params interface{}) error {
 		return err
 	}
 
-	el, err := a.findElement(p.Element)
+	return a.assertUntil(p.Timeout, func() error {
+		el, err := a.findElement(p.Element)
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	visible, err := el.IsDisplayed()
+		visible, err := el.IsDisplayed()
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	a.assert(visible, fmt.Sprintf("%s is visible", p.Element))
+		a.assert(visible, fmt.Sprintf("%s is visible", p.Element))
 
-	return nil
+		return nil
+	})
 }

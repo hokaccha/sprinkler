@@ -11,6 +11,7 @@ func init() {
 type AssertUrlParams struct {
 	Equal   *string `name:"equal"`
 	Contain *string `name:"contain"`
+	Timeout int     `name:"timeout"`
 }
 
 type AssertUrlAction struct {
@@ -25,23 +26,27 @@ func (a *AssertUrlAction) Run(params interface{}) error {
 		return err
 	}
 
-	url, err := a.Wd.CurrentURL()
-
-	if err != nil {
-		return err
+	if p.Equal == nil && p.Contain == nil {
+		return fmt.Errorf(`invalid parameters: "equal" or "contain" is required`)
 	}
 
-	subject := fmt.Sprintf("URL")
+	return a.assertUntil(p.Timeout, func() error {
+		url, err := a.Wd.CurrentURL()
 
-	if p.Equal != nil {
-		a.assertEqual(subject, url, *p.Equal)
+		if err != nil {
+			return err
+		}
+
+		subject := fmt.Sprintf("URL")
+
+		if p.Equal != nil {
+			a.assertEqual(subject, url, *p.Equal)
+		}
+
+		if p.Contain != nil {
+			a.assertContain(subject, url, *p.Contain)
+		}
+
 		return nil
-	}
-
-	if p.Contain != nil {
-		a.assertContain(subject, url, *p.Contain)
-		return nil
-	}
-
-	return fmt.Errorf("invalid parameters: \"equal\" or \"contain\" is required")
+	})
 }

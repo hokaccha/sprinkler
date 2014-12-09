@@ -1,14 +1,82 @@
 scenarios:
-- name: Wait
+- name: Wait Assertion
   actions:
   - visit: assets/wait.html
 
-  - wait_for:
-      element: .el
-      timeout: 3000
-
+  - click: .b1
   - assert_text:
-      element: .el
-      equal: foo
+      element: .log
+      equal: b1 clicked
+      timeout: 1000
 
-  - wait: 1000
+  - click: .b2
+  - assert_attribute:
+      element: .log
+      attribute: data-foo
+      equal: bar
+      timeout: 1000
+
+  - click: .b3
+  - assert_css:
+      element: .log
+      property: color
+      equal: rgba(255, 0, 0, 1)
+      timeout: 1000
+
+  - click: .b4
+  - assert_dialog_text:
+      equal: foo
+      timeout: 1000
+  - handle_dialog: accept
+
+  - click: .b5
+  - assert_hidden:
+      element: .log
+      timeout: 1000
+
+  - click: .b6
+  - assert_visible:
+      element: .log
+      timeout: 1000
+
+  - click: .b7
+  - assert_not_exist:
+      element: .log
+      timeout: 1000
+
+  - click: .b8
+  - assert_exist:
+      element: .log
+      timeout: 1000
+
+  - click: .b9
+  - assert_length:
+      element: .log
+      equal: 2
+      timeout: 1000
+
+  - click: .b10
+  - assert_selected:
+      element: .c
+      timeout: 1000
+
+  - click: .b11
+  - assert_not_selected:
+      element: .c
+      timeout: 1000
+
+  - click: .b12
+  - assert_title:
+      equal: foo
+      timeout: 1000
+
+  - click: .b13
+  - assert_url:
+      contain: foo
+      timeout: 1000
+
+  - click: .b14
+  - assert_value:
+      element: .t
+      equal: text
+      timeout: 1000

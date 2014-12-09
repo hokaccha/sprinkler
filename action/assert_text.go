@@ -12,6 +12,7 @@ type AssertTextParams struct {
 	Element string  `name:"element"`
 	Equal   *string `name:"equal"`
 	Contain *string `name:"contain"`
+	Timeout int     `name:"timeout"`
 }
 
 type AssertTextAction struct {
@@ -26,29 +27,33 @@ func (a *AssertTextAction) Run(params interface{}) error {
 		return err
 	}
 
-	el, err := a.findElement(p.Element)
-
-	if err != nil {
-		return err
+	if p.Equal == nil && p.Contain == nil {
+		return fmt.Errorf(`invalid parameters: "equal" or "contain" is required`)
 	}
 
-	text, err := el.Text()
+	return a.assertUntil(p.Timeout, func() error {
+		el, err := a.findElement(p.Element)
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	subject := fmt.Sprintf("%s text", p.Element)
+		text, err := el.Text()
 
-	if p.Equal != nil {
-		a.assertEqual(subject, text, *p.Equal)
+		if err != nil {
+			return err
+		}
+
+		subject := fmt.Sprintf("%s text", p.Element)
+
+		if p.Equal != nil {
+			a.assertEqual(subject, text, *p.Equal)
+		}
+
+		if p.Contain != nil {
+			a.assertContain(subject, text, *p.Contain)
+		}
+
 		return nil
-	}
-
-	if p.Contain != nil {
-		a.assertContain(subject, text, *p.Contain)
-		return nil
-	}
-
-	return fmt.Errorf("invalid parameters: \"equal\" or \"contain\" is required")
+	})
 }
