@@ -10,3 +10,25 @@ scenarios:
   - assert_text:
       element: .log
       equal: s2:r2:c2:c3
+
+- name: assert form elements
+  actions:
+  - assert_selected: '[name="s"] option[value="s2"]'
+  - assert_selected: '[name="r"][value="r2"]'
+  - assert_selected: '[name="c"][value="c2"]'
+  - assert_selected: '[name="c"][value="c3"]'
+  - assert_selected:
+      element: '[name="s"] option[value="s1"]'
+      expected: false
+  - assert_selected:
+      element: '[name="s"] option[value="s3"]'
+      expected: false
+  - assert_selected:
+      element: '[name="r"][value="r1"]'
+      expected: false
+  - assert_selected:
+      element: '[name="r"][value="r3"]'
+      expected: false
+  - assert_selected:
+      element: '[name="c"][value="c1"]'
+      expected: false
