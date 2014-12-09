@@ -3,21 +3,21 @@ package action
 import "fmt"
 
 func init() {
-	RegisterAction("assert_visible", func() ActionRunner {
-		return new(AssertVisibleAction)
+	RegisterAction("assert_hidden", func() ActionRunner {
+		return new(AssertHiddenAction)
 	})
 }
 
-type AssertVisibleParams struct {
+type AssertHiddenParams struct {
 	Element  string "element"
 }
 
-type AssertVisibleAction struct {
+type AssertHiddenAction struct {
 	ActionBase
 }
 
-func (a *AssertVisibleAction) Run(params interface{}) error {
-	p := &AssertVisibleParams{}
+func (a *AssertHiddenAction) Run(params interface{}) error {
+	p := &AssertHiddenParams{}
 	err := a.parseParams(params, p)
 
 	if err != nil {
@@ -36,7 +36,7 @@ func (a *AssertVisibleAction) Run(params interface{}) error {
 		return err
 	}
 
-	a.assert(visible, fmt.Sprintf("%s is visible", p.Element))
+	a.assert(!visible, fmt.Sprintf("%s is hidden", p.Element))
 
 	return nil
 }

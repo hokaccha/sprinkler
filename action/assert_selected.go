@@ -10,7 +10,6 @@ func init() {
 
 type AssertSelectedParams struct {
 	Element  string "element"
-	Expected *bool  "expected"
 }
 
 type AssertSelectedAction struct {
@@ -25,11 +24,6 @@ func (a *AssertSelectedAction) Run(params interface{}) error {
 		return err
 	}
 
-	expected := true
-	if p.Expected != nil && *p.Expected == false {
-		expected = false
-	}
-
 	el, err := a.findElement(p.Element)
 
 	if err != nil {
@@ -42,11 +36,7 @@ func (a *AssertSelectedAction) Run(params interface{}) error {
 		return err
 	}
 
-	if expected == true {
-		a.assert(selected, fmt.Sprintf("%s is selected", p.Element))
-	} else {
-		a.assert(!selected, fmt.Sprintf("%s is not selected", p.Element))
-	}
+	a.assert(selected, fmt.Sprintf("%s is selected", p.Element))
 
 	return nil
 }
