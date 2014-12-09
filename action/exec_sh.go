@@ -11,7 +11,7 @@ func init() {
 }
 
 type ExecShParams struct {
-	Command string "command"
+	Command string `name:"command"`
 }
 
 type ExecShAction struct {

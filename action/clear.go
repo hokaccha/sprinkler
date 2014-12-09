@@ -5,7 +5,7 @@ func init() {
 }
 
 type ClearParams struct {
-	Element string "url"
+	Element string `name:"url"`
 }
 
 type ClearAction struct {

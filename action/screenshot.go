@@ -12,7 +12,7 @@ func init() {
 }
 
 type ScreenshotParams struct {
-	SavePath string "save_path"
+	SavePath string `name:"save_path"`
 }
 
 type ScreenshotAction struct {

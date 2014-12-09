@@ -12,8 +12,8 @@ func init() {
 }
 
 type AssertLengthParams struct {
-	Element string "element"
-	Equal   *int   "equal"
+	Element string `name:"element"`
+	Equal   *int   `name:"equal"`
 }
 
 type AssertLengthAction struct {

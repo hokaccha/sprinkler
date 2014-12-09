@@ -35,10 +35,10 @@ func NewPlayer(opts *PlayerOpts) *Player {
 type Actions []map[string]interface{}
 
 type Scenario struct {
-	Name    string      `name`
-	Actions Actions     `actions`
-	Include string      `include`
-	Tags    interface{} `tags`
+	Name    string      `yaml:"name"`
+	Actions Actions     `yaml:"actions"`
+	Include string      `yaml:"include"`
+	Tags    interface{} `yaml:"tags"`
 }
 
 type Scenarios []Scenario
@@ -48,11 +48,11 @@ type PlayScript struct {
 	FullPath   string
 	BaseName   string
 	BaseDir    string
-	Scenarios  Scenarios `scenarios`
-	Before     Actions   `before`
-	After      Actions   `after`
-	BeforeEach Actions   `before_each`
-	AfterEach  Actions   `after_each`
+	Scenarios  Scenarios `yaml:"scenarios"`
+	Before     Actions   `yaml:"before"`
+	After      Actions   `yaml:"after"`
+	BeforeEach Actions   `yaml:"before_each"`
+	AfterEach  Actions   `yaml:"after_each"`
 }
 
 func NewPlayScript(inputFilePath string) (*PlayScript, error) {

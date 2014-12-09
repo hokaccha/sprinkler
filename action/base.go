@@ -97,7 +97,7 @@ func (a *ActionBase) parseParams(data interface{}, v interface{}) error {
 		for i := 0; i < vt.NumField(); i++ {
 			structField := vt.Field(i)
 			structValue := vv.Field(i)
-			val, ok := m[string(structField.Tag)]
+			val, ok := m[structField.Tag.Get("name")]
 
 			if !ok {
 				continue
@@ -125,19 +125,19 @@ func (a *ActionBase) parseParams(data interface{}, v interface{}) error {
 
 func setValue(structField reflect.StructField, structValue, val reflect.Value) error {
 	errFmt := "invalid parameter: %s must be %s"
-	tag := string(structField.Tag)
+	name := structField.Tag.Get("name")
 
 	if structValue.Kind() == reflect.Ptr {
 		e := structValue.Type().Elem()
 		if e.Kind() != val.Kind() {
-			return fmt.Errorf(errFmt, tag, e.Kind())
+			return fmt.Errorf(errFmt, name, e.Kind())
 		}
 		elem := reflect.New(e)
 		elem.Elem().Set(val)
 		structValue.Set(elem)
 	} else {
 		if structValue.Kind() != val.Kind() {
-			return fmt.Errorf(errFmt, tag, structValue.Kind())
+			return fmt.Errorf(errFmt, name, structValue.Kind())
 		}
 		structValue.Set(val)
 	}

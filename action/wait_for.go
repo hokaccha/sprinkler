@@ -10,8 +10,8 @@ func init() {
 }
 
 type WaitForParams struct {
-	Element string "element"
-	Timeout int    "delay"
+	Element string `name:"element"`
+	Timeout int    `name:"delay"`
 }
 
 type WaitForAction struct {

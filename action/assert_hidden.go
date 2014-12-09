@@ -9,7 +9,7 @@ func init() {
 }
 
 type AssertHiddenParams struct {
-	Element  string "element"
+	Element  string `name:"element"`
 }
 
 type AssertHiddenAction struct {

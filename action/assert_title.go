@@ -9,8 +9,8 @@ func init() {
 }
 
 type AssertTitleParams struct {
-	Equal   *string "equal"
-	Contain *string "contain"
+	Equal   *string `name:"equal"`
+	Contain *string `name:"contain"`
 }
 
 type AssertTitleAction struct {

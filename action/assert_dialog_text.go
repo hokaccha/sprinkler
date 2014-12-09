@@ -9,8 +9,8 @@ func init() {
 }
 
 type AssertDialogTextParams struct {
-	Equal   *string "equal"
-	Contain *string "contain"
+	Equal   *string `name:"equal"`
+	Contain *string `name:"contain"`
 }
 
 type AssertDialogTextAction struct {

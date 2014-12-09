@@ -7,7 +7,7 @@ func init() {
 }
 
 type ExecScriptParams struct {
-	Script string "script"
+	Script string `name:"script"`
 }
 
 type ExecScriptAction struct {

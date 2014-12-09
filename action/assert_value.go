@@ -9,10 +9,10 @@ func init() {
 }
 
 type AssertValueParams struct {
-	Element string  "element"
-	Value   string  "value"
-	Equal   *string "equal"
-	Contain *string "contain"
+	Element string  `name:"element"`
+	Value   string  `name:"value"`
+	Equal   *string `name:"equal"`
+	Contain *string `name:"contain"`
 }
 
 type AssertValueAction struct {

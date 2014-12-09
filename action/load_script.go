@@ -12,7 +12,7 @@ func init() {
 }
 
 type LoadScriptParams struct {
-	Src string "src"
+	Src string `name:"src"`
 }
 
 type LoadScriptAction struct {

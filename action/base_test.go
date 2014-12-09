@@ -3,9 +3,9 @@ package action
 import "testing"
 
 type T struct {
-	Foo string  "foo"
-	Bar int     "bar"
-	Baz *string "baz"
+	Foo string  `name:"fxx"`
+	Bar int     `name:"bar"`
+	Baz *string `name:"baz"`
 }
 
 func TestParseParams(t *testing.T) {
@@ -13,7 +13,7 @@ func TestParseParams(t *testing.T) {
 	a := &ActionBase{}
 
 	var d interface{} = map[interface{}]interface{}{
-		"foo": "foo val",
+		"fxx": "foo val",
 		"bar": 100,
 		"baz": "baz val",
 	}
@@ -59,12 +59,12 @@ func TestParseParams(t *testing.T) {
 
 	t3 := &T{}
 
-	err = a.parseParams(map[interface{}]interface{}{"foo": 100}, t3)
-	if err.Error() != "invalid parameter: foo must be string" {
+	err = a.parseParams(map[interface{}]interface{}{"fxx": 100}, t3)
+	if err.Error() != "invalid parameter: fxx must be string" {
 		t.Errorf("invalid err: \"%s\"", err.Error())
 	}
 
-	err = a.parseParams(map[interface{}]interface{}{"bar": "foo"}, t3)
+	err = a.parseParams(map[interface{}]interface{}{"bar": "xxx"}, t3)
 	if err.Error() != "invalid parameter: bar must be int" {
 		t.Errorf("invalid err: \"%s\"", err.Error())
 	}
@@ -75,7 +75,7 @@ func TestParseParams(t *testing.T) {
 	}
 
 	err = a.parseParams(100, t3)
-	if err.Error() != "invalid parameter: foo must be string" {
+	if err.Error() != "invalid parameter: fxx must be string" {
 		t.Errorf("invalid err: \"%s\"", err.Error())
 	}
 }

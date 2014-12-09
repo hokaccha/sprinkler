@@ -9,11 +9,11 @@ func init() {
 }
 
 type AssertAttributeParams struct {
-	Element   string  "element"
-	Attribute string  "attribute"
-	Equal     *string "equal"
-	Contain   *string "contain"
-	Present   *string "present"
+	Element   string  `name:"element"`
+	Attribute string  `name:"attribute"`
+	Equal     *string `name:"equal"`
+	Contain   *string `name:"contain"`
+	Present   *string `name:"present"`
 }
 
 type AssertAttributeAction struct {

@@ -7,7 +7,7 @@ func init() {
 }
 
 type HandleDialogParams struct {
-	Type string "type"
+	Type string `name:"type"`
 }
 
 type HandleDialogAction struct {

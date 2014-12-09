@@ -9,7 +9,7 @@ func init() {
 }
 
 type AssertVisibleParams struct {
-	Element  string "element"
+	Element  string `name:"element"`
 }
 
 type AssertVisibleAction struct {

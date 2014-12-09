@@ -9,7 +9,7 @@ func init() {
 }
 
 type AssertNotExistParams struct {
-	Element  string "element"
+	Element  string `name:"element"`
 }
 
 type AssertNotExistAction struct {

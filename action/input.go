@@ -7,8 +7,8 @@ func init() {
 }
 
 type InputParams struct {
-	Element string "element"
-	Value   string "value"
+	Element string `name:"element"`
+	Value   string `name:"value"`
 }
 
 type InputAction struct {

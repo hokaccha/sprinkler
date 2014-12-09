@@ -5,7 +5,7 @@ func init() {
 }
 
 type ClickParams struct {
-	Element string "url"
+	Element string `name:"url"`
 }
 
 type ClickAction struct {

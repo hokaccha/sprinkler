@@ -11,7 +11,7 @@ func init() {
 }
 
 type VisitParams struct {
-	Url string "url"
+	Url string `name:"url"`
 }
 
 type VisitAction struct {

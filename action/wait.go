@@ -7,7 +7,7 @@ func init() {
 }
 
 type WaitParams struct {
-	Delay int "delay"
+	Delay int `name:"delay"`
 }
 
 type WaitAction struct {

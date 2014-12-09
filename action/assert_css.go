@@ -9,9 +9,9 @@ func init() {
 }
 
 type AssertCssParams struct {
-	Element  string  "element"
-	Property string  "property"
-	Equal    *string "equal"
+	Element  string  `name:"element"`
+	Property string  `name:"property"`
+	Equal    *string `name:"equal"`
 }
 
 type AssertCssAction struct {

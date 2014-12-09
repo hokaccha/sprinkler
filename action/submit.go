@@ -5,7 +5,7 @@ func init() {
 }
 
 type SubmitParams struct {
-	Element string "url"
+	Element string `name:"url"`
 }
 
 type SubmitAction struct {

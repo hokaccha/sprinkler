@@ -9,7 +9,7 @@ func init() {
 }
 
 type AssertSelectedParams struct {
-	Element  string "element"
+	Element  string `name:"element"`
 }
 
 type AssertSelectedAction struct {
