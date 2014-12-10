@@ -1,0 +1,48 @@
+scenarios:
+- name: web storage
+  actions:
+  - visit: assets/web_storage.html
+
+  # localStorage
+  - delete_local_storage: l-key1
+
+  - assert_local_storage:
+      key: l-key1
+      equal: ""
+
+  - set_local_storage:
+      key: l-key1
+      value: l-val1
+
+  - assert_local_storage:
+      key: l-key1
+      equal: l-val1
+
+  - click: .btn1
+
+  - assert_local_storage:
+      key: l-key2
+      equal: '{"a":"b"}'
+      timeout: 1000
+
+  # sessionStorage
+  - delete_session_storage: s-key1
+
+  - assert_session_storage:
+      key: s-key1
+      equal: ""
+
+  - set_session_storage:
+      key: s-key1
+      value: s-val1
+
+  - assert_session_storage:
+      key: s-key1
+      equal: s-val1
+
+  - click: .btn2
+
+  - assert_session_storage:
+      key: s-key2
+      equal: '{"c":"d"}'
+      timeout: 1000
