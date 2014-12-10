@@ -248,5 +248,5 @@ func (player *Player) HandleActionResult(result *action.ActionResult) {
 		player.FailCount++
 	}
 
-	fmt.Println(result.Message)
+	fmt.Println("  "+result.Message)
 }
