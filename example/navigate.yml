@@ -1,0 +1,25 @@
+scenarios:
+- name: navigate refresh action
+  actions:
+  - visit: assets/navigate.html
+  - click: .add
+  - assert_text:
+      element: .log
+      equal: added
+  - navigate: refresh
+  - assert_text:
+      element: .log
+      equal: ""
+
+- name: navigate back and forword actions
+  actions:
+  - visit: assets/navigate.html?bar
+  - click: .link
+  - assert_url:
+      contain: "?foo"
+  - navigate: back
+  - assert_url:
+      contain: "?bar"
+  - navigate: forword
+  - assert_url:
+      contain: "?foo"
