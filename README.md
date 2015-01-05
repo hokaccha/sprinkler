@@ -13,11 +13,10 @@ Get started
 OSX:
 
 ```
-$ brew tap hokaccha/sprinkler
-$ brew install sprinkler
+$ brew install hokaccha/tap/sprinkler
 ```
 
-or:
+Other platforms:
 
 Dowonload from [releases](https://github.com/hokaccha/sprinkler/releases)
 
